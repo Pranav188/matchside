@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import{describe,it,expect,vi,beforeEach,afterEach}from'vitest';
 import type{MatchSnapshot,AiAnswer}from'../shared/contracts.ts';
 const mocks=vi.hoisted(()=>({getAnswer:vi.fn(),putAnswer:vi.fn(),reserveAi:vi.fn(),releaseAi:vi.fn(),currentMatch:vi.fn(),generate:vi.fn(),recordedAnswer:vi.fn(),dailyAiLimit:vi.fn()}));
@@ -14,6 +16,21 @@ afterEach(()=>{vi.restoreAllMocks();vi.unstubAllEnvs();});
 function backup(){for(const[k,v]of Object.entries({GEMINI_BACKUP_API_KEY:'synthetic-backup',GEMINI_BACKUP_FREE_RPD:'20',GEMINI_BACKUP_FREE_RPM:'5',GEMINI_BACKUP_FREE_TPM:'250000'}))vi.stubEnv(k,v);}
 const modelFailure=(code:string,status=502)=>Object.assign(new Error('Synthetic model failure'),{code,status,retryAfterSeconds:120});
 describe('AI HTTP orchestration',()=>{
+ it('resolves an explicit ordinal before cache lookup and passes only its incident to the model',async()=>{
+  vi.stubEnv('GEMINI_MODEL','gemini-3.5-flash-lite');
+  const recorded=JSON.parse(readFileSync('data/recorded-match.json','utf8')) as MatchSnapshot;
+  mocks.currentMatch.mockResolvedValue({snapshot:recorded,freshness:'fresh',mode:'live',message:null});
+  const question='why was the fourth yellow card shown?';
+  const r=await handleRequest(new Request('http://localhost/api/ask',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'live',question,eventId:'158513730'})}));
+  expect(r.status).toBe(200);expect(mocks.generate.mock.calls[0][0].eventId).toBe('158513916');
+  const key=createHash('sha256').update(JSON.stringify({mode:'live',version:recorded.contentVersion,question,eventId:'158513916',model:'gemini-3.5-flash-lite',prompt:'test'})).digest('hex');
+  expect(mocks.getAnswer.mock.calls[0][0]).toBe(key);
+ });
+ it('does not spend quota or return a different incident when an ordinal is missing',async()=>{
+  const r=await handleRequest(new Request('http://localhost/api/ask',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'live',question:'why was the fourth yellow card shown?'})}));
+  expect(r.status).toBe(422);expect(mocks.getAnswer).not.toHaveBeenCalled();expect(mocks.reserveAi).not.toHaveBeenCalled();expect(mocks.generate).not.toHaveBeenCalled();
+ });
+
  it('returns a successful answer even if cache persistence fails',async()=>{mocks.putAnswer.mockRejectedValue(new Error('do not expose'));const response=await handleRequest(request());expect(response.status).toBe(200);expect((await response.json()).claims).toEqual(answer.claims);expect(mocks.releaseAi).toHaveBeenCalledOnce();});
  it('serves saved recorded answers before database access, budget checks or model calls',async()=>{mocks.recordedAnswer.mockResolvedValue({...answer,mode:'example',cached:true});mocks.getAnswer.mockRejectedValue(new Error('Database unavailable'));mocks.reserveAi.mockResolvedValue({allowed:false,retryAfterSeconds:3600});const response=await handleRequest(new Request('http://localhost/api/ask',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'example',question:'What does possession tell us?'})}));expect(response.status).toBe(200);expect((await response.json()).cached).toBe(true);expect(mocks.getAnswer).not.toHaveBeenCalled();expect(mocks.reserveAi).not.toHaveBeenCalled();expect(mocks.generate).not.toHaveBeenCalled();});
  it('cache hits never consume generation allowance',async()=>{mocks.getAnswer.mockResolvedValue(answer);const response=await handleRequest(request());expect((await response.json()).cached).toBe(true);expect(mocks.reserveAi).not.toHaveBeenCalled();expect(mocks.generate).not.toHaveBeenCalled();});

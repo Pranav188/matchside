@@ -8,6 +8,7 @@ import { currentMatch } from './match-service.ts';
 import { fetchFixture } from './provider.ts';
 import { buildEvidence, generateAnswer, AI_PROMPT_VERSION } from './ai.ts';
 import { sessionFromCookie } from './session.ts';
+import { resolveIncident, readableAnswer } from './incidents.ts';
 import { recordedExample } from './example.ts';
 import { recordedAnswer } from './recorded-answers.ts';
 import type { Mode, MatchResponse } from '../shared/contracts.ts';
@@ -66,6 +67,7 @@ async function routeRequest(request:Request):Promise<Response> {
       if(data.mode==='example') {
         result=await match('example');
         if(result.snapshot) {
+          data.eventId=resolveIncident(result.snapshot,data.question,data.eventId);
           const saved=await recordedAnswer(result.snapshot,data.question,data.eventId,config.model);
           if(saved)return json(saved);
         }
@@ -77,11 +79,12 @@ async function routeRequest(request:Request):Promise<Response> {
       if(!result.snapshot) throw new AppError('NO_MATCH_DATA','Match information is not available yet. Please retry after it connects.');
       if(result.freshness==='stale') throw new AppError('STALE_MATCH','Match updates are delayed. Please wait for a successful refresh before asking AI.');
       const snapshot=result.snapshot; // Capture one immutable evidence version before generation.
+      data.eventId=resolveIncident(snapshot,data.question,data.eventId);
       if(data.eventId&&!snapshot.events.some(e=>e.id===data.eventId)) throw new AppError('EVENT_CHANGED','This event is no longer in the latest match update. Select it again.',409);
       const store=new PostgresStore(config.databaseUrl);
       const key=createHash('sha256').update(JSON.stringify({mode:data.mode,version:snapshot.contentVersion,question:data.question.toLowerCase().replace(/\s+/g,' '),eventId:data.eventId,model:config.model,prompt:AI_PROMPT_VERSION})).digest('hex');
       const cached=await store.getAnswer(key,Date.now());
-      if(cached) return json({...cached,cached:true},200,headers);
+      if(cached) return json(readableAnswer(snapshot,{...cached,cached:true}),200,headers);
       // Both accounts share a conservative total allowance, visitor limits and one in-flight gate.
       const limits=getAiLimits(config);
       const candidates=[config.apiKey,...(backupAiConfigured(config)?[config.backupGemini.apiKey]:[])];

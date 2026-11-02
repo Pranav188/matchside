@@ -77,3 +77,12 @@ Runtime commit `27167b4` uses server-selected Gemini 3.5 Flash-Lite for new gene
 Verification: four migration regression cases failed before implementation, then all 188 application tests, typecheck, production build and four packaging checks passed. One real local and one fresh hosted Flash-Lite answer returned 200 with the matching 85-minute Kristian Arnstad argument/card fact. All three shipped suggested answers returned 200 as cached. Browser Enter submission returned that saved answer; the visible keyboard instruction is removed. Hosted proof is retained locally under `qa/hosted-flash-lite-check.json` and `qa/hosted-flash-lite-ui.png`.
 
 The submission Markdown and Downloads PDF now name Flash-Lite; the one-page PDF and clickable contact footer were visually and structurally checked, and visible text remains under 200 words. Actual backup failover and the full real-model evaluation remain unforced/incomplete.
+
+
+## Explicit card order and answer readability
+
+Numbered yellow/red-card questions now resolve against the supplied chronological event list before cache lookup or generation. Explicit numbered questions override a previous selected incident; missing cards, multiple numbered targets, and ambiguous player/team-specific counts return a selection message without consuming AI quota. The recorded fourth yellow is Oliver Villadsen at 90+2 minutes, not Kristian Arnstad at 85.
+
+The model prompt requests fan-facing sentences. Verbatim raw card records are formatted into readable facts while retaining the original evidence and references. Dynamic answers use a new prompt/cache version so prior incorrect answers are not reused. The three vetted shipped answers retain their original facts, provenance and validation during this presentation-only prompt migration. No provider credentials, quotas, schema or UI layout changed.
+
+Regression coverage includes chronological selection, color filtering, missing and ambiguous references, conflicting selected context, pre-cache resolution, and readable card formatting. Local real-model verification of the exact fourth-card question returned Oliver Villadsen with the matching event reference.
