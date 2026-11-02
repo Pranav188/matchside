@@ -15,3 +15,5 @@ The owner narrowed the prototype after real provider checks: incident explanatio
 ## Visual and copy direction, 2 November 2026
 
 Use the supplied FanCode screenshots as direction for a charcoal viewing surface, orange interaction accents and compact football information, while retaining MatchSide branding. Avoid prototype badges, construction-status language and repeated explanatory slogans in the fan interface. Preserve factual live/recorded status, missing-data messages and source access. Do not imply an official FanCode integration.
+
+Keep the question field free of a visible Enter/Shift+Enter instruction. Enter submits, Shift+Enter inserts a new line, and IME confirmation remains guarded.

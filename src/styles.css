@@ -308,7 +308,6 @@ textarea { caret-color: var(--orange); }
 .possession-unavailable { color: var(--muted); font-size: 14px; padding: 2px 0 8px; }
 .information-rail > .rail-tabs { padding-top: 8px; }
 .ai-title-row { margin-bottom: 18px; }
-.keyboard-help { flex-basis: 100%; color: #b6bfcd; }
 .evidence-groups { margin: 22px 0; }
 .evidence-groups > section + section { margin-top: 22px; }
 .evidence-groups h3 { font-size: 14px; color: #c3cdda; font-weight: 600; }
