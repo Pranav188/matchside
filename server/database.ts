@@ -31,6 +31,16 @@ export class PostgresStore implements Store {
     const rows=await this.sql`SELECT * FROM reserve_ai(${sessionId},${token},${estimatedTokens},${limits.daily},${limits.rpm},${limits.tpm},${now})`;
     return {allowed: Boolean(rows[0]?.allowed),retryAfterSeconds: Number(rows[0]?.retry_after_seconds??60)};
   }
+  async dailyAiLimit(sessionId:string,daily:number,now:number):Promise<{scope:'application'|'visitor';resetAt:string}|null> {
+    const rows=await this.sql`WITH clock AS (SELECT to_timestamp(${now}/1000.0) AT TIME ZONE 'America/Los_Angeles' AS local_now)
+      SELECT COALESCE((SELECT count FROM usage_counters WHERE key='global-day:'||to_char(local_now,'YYYY-MM-DD')),0) AS global_used,
+        COALESCE((SELECT count FROM usage_counters WHERE key='session-day:'||${sessionId}||':'||to_char(local_now,'YYYY-MM-DD')),0) AS visitor_used,
+        (extract(epoch FROM (((local_now::date+1)::timestamp) AT TIME ZONE 'America/Los_Angeles'))*1000)::bigint AS reset_at FROM clock`;
+    const row=rows[0];
+    if(!row)return null;
+    const scope=Number(row.global_used)>=daily?'application':Number(row.visitor_used)>=10?'visitor':null;
+    return scope?{scope,resetAt:new Date(Number(row.reset_at)).toISOString()}:null;
+  }
   async releaseAi(token:string,cooldownSeconds:number,now:number) {
     await this.sql`UPDATE ai_gate SET lease_until=0,lease_token=NULL,cooldown_until=GREATEST(cooldown_until,${now+cooldownSeconds*1000}) WHERE id=TRUE AND lease_token=${token}`;
   }

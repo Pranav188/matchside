@@ -33,7 +33,7 @@ export interface AiAnswer {
   mode: Mode; contentVersion: string; asOf: string; matchMinute: number | null;
   cached: boolean;
 }
-export interface ApiError { error: { code: string; message: string; requestId?: string; retryAfterSeconds?: number } }
+export interface ApiError { error: { code: string; message: string; requestId?: string; retryAfterSeconds?: number; retryAt?: string } }
 export interface HealthResponse {
   status: 'ready' | 'setup-required';
   services: { football: boolean; fixture: boolean; ai: boolean; database: boolean; session: boolean; aiQuota: boolean; example: boolean };

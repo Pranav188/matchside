@@ -86,7 +86,14 @@ async function routeRequest(request:Request):Promise<Response> {
       // Conservative UTF-8 byte reservation bounds tokens, plus prompt/output allowance.
       const estimated=Buffer.byteLength(JSON.stringify(buildEvidence(snapshot,data.eventId))+data.question)+4096;
       const reservation=await store.reserveAi(session.id,token,estimated,{daily:Math.min(40,config.freeRpd-5),rpm:config.freeRpm,tpm:config.freeTpm},Date.now());
-      if(!reservation.allowed) return json({error:{code:'AI_RATE_LIMIT',message:'AI is busy or its free allowance has been reached. Match information is still available.',requestId,retryAfterSeconds:reservation.retryAfterSeconds}},429,{...headers,'Retry-After':String(reservation.retryAfterSeconds)});
+      if(!reservation.allowed) {
+        const daily=await store.dailyAiLimit(session.id,Math.min(40,config.freeRpd-5),Date.now()).catch(()=>null);
+        const retryAfterSeconds=daily?Math.max(1,Math.ceil((Date.parse(daily.resetAt)-Date.now())/1000)):reservation.retryAfterSeconds;
+        const message=daily
+          ? `${daily.scope==='application'?"Today's AI generation allowance has been reached.":'You have reached your daily AI generation allowance.'} In Recorded match, the three suggested questions still work using saved answers.`
+          : 'New AI requests are temporarily limited. Match information remains available. In Recorded match, try one of the three suggested questions for a saved answer.';
+        return json({error:{code:daily?'AI_DAILY_LIMIT':'AI_RATE_LIMIT',message,requestId,retryAfterSeconds,...(daily?{retryAt:daily.resetAt}:{})}},429,{...headers,'Retry-After':String(retryAfterSeconds)});
+      }
       let cooldown=0;
       try {
         const answer=await generateAnswer({snapshot,mode:data.mode,question:data.question,eventId:data.eventId,apiKey:config.apiKey,model:config.model});

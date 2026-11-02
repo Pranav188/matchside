@@ -8,14 +8,19 @@ const POLL_MS = 15_000;
 const MATCH_TIMEOUT_MS = 20_000;
 const AI_TIMEOUT_MS = 35_000;
 const QUESTION_LIMIT = 400;
+class ApiRequestError extends Error {
+  constructor(message:string,public code:string|undefined,public retryUntil:number) {super(message);}
+}
 
 async function readResponse<T>(response: Response): Promise<T> {
   let body: unknown;
   try { body = await response.json(); } catch { throw new Error('The connection returned an unreadable response. Please try again.'); }
   if (!response.ok) {
     const error = (body as ApiError)?.error;
-    const wait = error?.retryAfterSeconds ? ` Try again in ${error.retryAfterSeconds} seconds.` : '';
-    throw new Error((error?.message || 'Something went wrong. Please try again.') + wait);
+    const reset=error?.retryAt?Date.parse(error.retryAt):NaN;
+    const seconds=error?.retryAfterSeconds;
+    const wait=Number.isFinite(reset)?` New answers resume ${new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(reset))}.`:seconds?seconds>=3600?' Please try again later.':seconds>=60?` Try again in ${Math.ceil(seconds/60)} minute${seconds>60?'s':''}.`:` Try again in ${seconds} seconds.`:'';
+    throw new ApiRequestError((error?.message || 'Something went wrong. Please try again.') + wait,error?.code,Number.isFinite(reset)?reset:Date.now()+(seconds??60)*1000);
   }
   return body as T;
 }
@@ -173,6 +178,7 @@ export function App() {
   const [answerQuestion, setAnswerQuestion] = useState('');
   const [asking, setAsking] = useState(false);
   const [askError, setAskError] = useState<string | null>(null);
+  const [aiLimit, setAiLimit] = useState<{daily:boolean;until:number}|null>(null);
   const [evidence, setEvidence] = useState<EvidenceFact[] | null>(null);
   const questionRef = useRef<HTMLTextAreaElement>(null);
   const aiRequest = useRef<AbortController | null>(null);
@@ -223,9 +229,12 @@ export function App() {
     try {
       const response = await fetch('/api/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode, question: asked, ...(selected ? { eventId: selected.id } : {}) }), signal: controller.signal });
       const next = await readResponse<AiAnswer>(response);
-      if (generation === aiGeneration.current && !controller.signal.aborted) { setAnswer(next); setAnswerQuestion(asked); }
+      if (generation === aiGeneration.current && !controller.signal.aborted) { setAnswer(next); setAnswerQuestion(asked); if(!next.cached)setAiLimit(null); }
     } catch (cause) {
-      if (generation === aiGeneration.current && (timedOut || !controller.signal.aborted)) setAskError(timedOut ? 'The AI answer took too long. Please try again.' : cause instanceof Error ? cause.message : 'The answer could not be generated. Please try again.');
+      if (generation === aiGeneration.current && (timedOut || !controller.signal.aborted)) {
+        setAskError(timedOut ? 'The AI answer took too long. Please try again.' : cause instanceof Error ? cause.message : 'The answer could not be generated. Please try again.');
+        if(cause instanceof ApiRequestError && ['AI_DAILY_LIMIT','AI_RATE_LIMIT','AI_RATE_LIMITED'].includes(cause.code??''))setAiLimit({daily:cause.code==='AI_DAILY_LIMIT',until:cause.retryUntil});
+      }
     } finally {
       window.clearTimeout(timeout);
       if (aiTimer.current === timeout) aiTimer.current = null;
@@ -246,7 +255,7 @@ export function App() {
     {askError && <div className="ask-error" role="alert"><WarningCircle size={18} /><p>{askError} Your question is kept above so you can try again.</p></div>}
     {asking && <div className="answer-loading" role="status"><Sparkle size={18} /><span>Checking the match facts and preparing an answer…</span></div>}
     <p className="sr-only" role="status" aria-live="polite">{modeAnswer && !asking && !askError ? 'Answer ready. The explanation and supporting sources follow.' : ''}</p>
-    {modeAnswer && <article className="answer" aria-label="AI answer"><div className="answer-heading"><p>MatchSide answer{modeAnswer.cached ? ' · Cached' : ''}</p><span>{modeAnswer.matchMinute !== null ? `${modeAnswer.matchMinute}′ · ` : ''}{time(modeAnswer.asOf)}</span></div><h3>{answerQuestion}</h3>{changed && <p className="answer-stale"><Info size={15} />The match has updated since this answer. Ask again for the latest context.</p>}<div className="answer-claims">{modeAnswer.claims.map((claim, index) => <p key={`${modeAnswer.contentVersion}-${index}`}>{claim.text}{claim.evidenceIds.length > 0 && <button className="claim-source" aria-label={`View evidence for statement ${index + 1}`} onClick={() => setEvidence(modeAnswer.facts.filter((fact) => claim.evidenceIds.includes(fact.id)))}>{claim.evidenceIds.length === 1 ? 'Source' : 'Sources'}<ArrowUpRight size={12} aria-hidden="true" /></button>}</p>)}</div>{modeAnswer.limitation && <p className="answer-limitation"><Info size={16} />{modeAnswer.limitation}</p>}<button className="text-button evidence-button" onClick={() => setEvidence(modeAnswer.facts)}>View supporting match facts<ArrowUpRight size={15} /></button></article>}
+    {modeAnswer && <article className="answer" aria-label="AI answer"><div className="answer-heading"><p>MatchSide answer{modeAnswer.cached ? ' · Cached' : ''}</p><span>{modeAnswer.matchMinute !== null ? `${modeAnswer.matchMinute}′ · ` : ''}{time(modeAnswer.asOf)}</span></div><h3>{answerQuestion}</h3>{modeAnswer.cached && <p className="data-caption">{aiLimit && aiLimit.until>Date.now() ? aiLimit.daily ? "We’re showing a cached answer because the daily AI generation limit has been reached." : "We’re showing a cached answer while new AI requests are rate-limited." : modeAnswer.mode==='example' ? 'Showing a saved AI answer for this recorded match. No new AI request was made.' : 'Showing a previously generated answer for this match. No new AI request was made.'}</p>}{changed && <p className="answer-stale"><Info size={15} />The match has updated since this answer. Ask again for the latest context.</p>}<div className="answer-claims">{modeAnswer.claims.map((claim, index) => <p key={`${modeAnswer.contentVersion}-${index}`}>{claim.text}{claim.evidenceIds.length > 0 && <button className="claim-source" aria-label={`View evidence for statement ${index + 1}`} onClick={() => setEvidence(modeAnswer.facts.filter((fact) => claim.evidenceIds.includes(fact.id)))}>{claim.evidenceIds.length === 1 ? 'Source' : 'Sources'}<ArrowUpRight size={12} aria-hidden="true" /></button>}</p>)}</div>{modeAnswer.limitation && <p className="answer-limitation"><Info size={16} />{modeAnswer.limitation}</p>}<button className="text-button evidence-button" onClick={() => setEvidence(modeAnswer.facts)}>View supporting match facts<ArrowUpRight size={15} /></button></article>}
     <a href="https://www.fancode.com/football" target="_blank" rel="noreferrer" className="mobile-stream-link" aria-label="Open FanCode football in a new tab">Open FanCode<ArrowUpRight size={15} /></a>
     </section></div>
     <aside id="match-details" className="information-rail" aria-label="Match details" tabIndex={-1}><Tabs value={tab} onChange={setTab} id={tabsId} /><div role="tabpanel" id={`${tabsId}-panel`} aria-labelledby={`${tabsId}-${tab}`} className="rail-content">{loading && !snapshot ? <p className="match-loading" role="status">Loading match information…</p> : tab === 'match' ? <><StatRows snapshot={snapshot} /><Events snapshot={snapshot} selected={selected?.id || null} onSelect={chooseEvent} disabled={asking} /></> : <Lineups snapshot={snapshot} />}</div><div className="rail-footer"><span className={!snapshot ? 'connection-state pending' : stale ? 'connection-state stale' : 'connection-state'} /><span>{snapshot ? `${mode === 'example' ? 'Recorded data' : stale ? 'Last available update' : 'Latest available data'} · ${snapshot.provider}` : loading ? 'Loading match information…' : 'Match data unavailable'}</span>{snapshot && <button className="icon-button" aria-label="Refresh match data" disabled={refreshing} onClick={refresh}><ArrowClockwise className={refreshing ? 'spinning' : ''} size={16} /></button>}</div></aside></div>

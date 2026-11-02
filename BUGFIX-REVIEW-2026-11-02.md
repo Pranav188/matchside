@@ -42,3 +42,11 @@ A real generation failure exposed another retrieval bug: a prior substitution wa
 With all 15 daily app slots reserved, six repeated saved-answer API calls returned HTTP 200 with network access disabled and zero external calls. The reservation count stayed at 15. An uncached request returned HTTP 429. Plain Node emitted-handler tests also serve all three saved answers with no credentials. Browser QA confirmed Enter submission, the Cached label and a source dialog containing the exact possession fact.
 
 159 application tests, typecheck, production build and four packaging checks passed. The isolated official Vercel Node bundle includes both data files and serves all three answers without external requests. Hosted verification remains pending.
+
+## Quota and cached-answer messaging
+
+A daily app-cap denial is now distinguished from a temporary limit using a read-only counter check after denial. The atomic reservation, limits and database schema are unchanged. The API returns the next Pacific-midnight reset instead of an arbitrary one-hour wait; the current reset and daylight-saving boundary were verified through real read-only SQL.
+
+The UI explains that a cached answer is being shown because of a limit only after receiving a confirmed limit response. Otherwise it neutrally identifies a previously saved answer. Different recorded fixtures remain isolated by fixture/version/context checks; a multiple-recording selector has not been added.
+
+165 tests, typecheck, build and four packaging checks passed. Browser QA reproduced the custom-question denial and then the cached-answer recovery, including the November 3, 1:30 PM IST reset message. No further Gemini generations were requested.

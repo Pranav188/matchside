@@ -72,6 +72,27 @@ describe('live match companion behavior', () => {
     await flush(() => fireEvent.click(screen.getByRole('button', { name: 'Ask MatchSide' })));
     expect(screen.getByText('MatchSide answer · Cached')).toBeTruthy();
   });
+  it('explains a cached fallback after a confirmed daily limit without claiming an hourly reset', async () => {
+    let calls=0;
+    mockFetch(url => url === '/api/ask' ? ++calls===1 ? json({error:{code:'AI_DAILY_LIMIT',message:'Daily AI allowance reached.',retryAfterSeconds:7200,retryAt:new Date(Date.now()+7200000).toISOString()}},false) : json({...answer(),cached:true}) : usual(url));
+    await open();
+    await flush(() => fireEvent.change(screen.getByRole('textbox'),{target:{value:'Why was that player booked?'}}));
+    await flush(() => fireEvent.click(screen.getByRole('button',{name:'Ask MatchSide'})));
+    expect(screen.getByRole('alert').textContent).toContain('New answers resume');
+    expect(screen.getByRole('alert').textContent).not.toContain('3600 seconds');
+    await flush(() => fireEvent.click(screen.getByRole('button',{name:'Explain latest incident'})));
+    await flush(() => fireEvent.click(screen.getByRole('button',{name:'Ask MatchSide'})));
+    expect(screen.getByText('We’re showing a cached answer because the daily AI generation limit has been reached.')).toBeTruthy();
+  });
+  it('does not claim a rate limit just because an answer is cached', async () => {
+    mockFetch(url => url === '/api/ask' ? json({...answer(),mode:'example',cached:true}) : usual(url));
+    await open();
+    await flush(() => fireEvent.click(screen.getByRole('radio',{name:'Recorded match'})));
+    await flush(() => fireEvent.click(screen.getByRole('button',{name:'Explain latest incident'})));
+    await flush(() => fireEvent.click(screen.getByRole('button',{name:'Ask MatchSide'})));
+    expect(screen.getByText('Showing a saved AI answer for this recorded match. No new AI request was made.')).toBeTruthy();
+    expect(screen.queryByText(/because the daily AI generation limit/)).toBeNull();
+  });
   it('shows a neutral loading state instead of claiming the match is disconnected before the first response', async () => {
     const pending = deferred<Response>();
     mockFetch(url => url === '/api/health' ? json(health) : pending.promise);
