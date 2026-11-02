@@ -98,7 +98,7 @@ If incognito shows a Vercel login screen, first check that you used the producti
 Use this only if GitHub import is unavailable. It uploads the reviewed local directory, so run it from this exact project:
 
 ```sh
-cd /Users/pranav/Documents/Codex/2026-10-30/ch/outputs/matchside
+cd /Users/pranav/projects/matchside
 npx vercel@65.9.0 login
 npx vercel@65.9.0 link
 ```
