@@ -2,9 +2,9 @@ import { z } from 'zod';
 import type { AiAnswer, EvidenceFact, MatchSnapshot, Mode } from '../shared/contracts';
 import { retryAfterSeconds } from './errors.ts';
 import { GEMINI_MODELS } from './config.ts';
-import { readableAnswer } from './incidents.ts';
+import { readableAnswer, resolveIncident } from './incidents.ts';
 
-export const AI_PROMPT_VERSION = 'match-context-v11';
+export const AI_PROMPT_VERSION = 'match-context-v12';
 const MAX_EVIDENCE_CHARS = 12_000;
 const MAX_WORDS = 120;
 
@@ -21,7 +21,7 @@ const numericTokens = (value: string) => value.match(/\d+(?:\.\d+)?/g) ?? [];
 const words = (value: string) => value.trim().split(/\s+/).filter(Boolean).length;
 
 /** Evidence is deliberately bounded. It is data, never model instructions. */
-export function buildEvidence(snapshot: MatchSnapshot, eventId?: string): EvidenceFact[] {
+export function buildEvidence(snapshot: MatchSnapshot, eventId?: string, includeCardOrder = false): EvidenceFact[] {
   const facts: EvidenceFact[] = [];
   const add = (fact: EvidenceFact) => {
     if (JSON.stringify([...facts, fact]).length <= MAX_EVIDENCE_CHARS) facts.push(fact);
@@ -54,6 +54,12 @@ export function buildEvidence(snapshot: MatchSnapshot, eventId?: string): Eviden
       ? `At ${at}, ${clean(teamName(event.teamId))} brought on ${event.player ? clean(event.player) : 'a player whose name is unavailable'} for ${event.relatedPlayer ? clean(event.relatedPlayer) : 'a player whose name is unavailable'}. Recorded detail: ${detail}.`
       : `${at} ${event.type}; ${clean(teamName(event.teamId))}; player: ${event.player ? clean(event.player) : 'not supplied'}; related player: ${event.relatedPlayer ? clean(event.relatedPlayer) : 'not supplied'}; recorded detail: ${detail}.`;
     add({ id: `event:${event.id}`, kind: 'event', text });
+  }
+  if (includeCardOrder && selected?.type === 'card' && snapshot.availability.events) {
+    const color=/yellow\s*card/i.test(selected.detail)?'yellow':/red\s*card/i.test(selected.detail)?'red':null;
+    const cards=snapshot.events.filter(event=>event.type==='card'&&(!color||new RegExp(`\\b${color}\\s*card\\b`,'i').test(event.detail)));
+    const position=cards.findIndex(event=>event.id===selected.id)+1;
+    if(position>0)add({id:`order:${selected.id}`,kind:'event',text:`The full supplied match timeline records ${selected.player??'this player'} as ${color??''} card number ${position} of ${cards.length}. This is whole-match order, not a player's personal card total.`});
   }
   if (!snapshot.availability.events) add({ id: 'missing:events', kind: 'limitation', text: 'The provider did not supply a match event feed.' });
   else if (!snapshot.events.length) add({ id: 'empty:events', kind: 'limitation', text: 'No incidents are recorded in this snapshot. This does not prove no incidents happened.' });
@@ -122,7 +128,9 @@ export async function generateAnswer({ snapshot, mode, question, eventId, apiKey
   if (!apiKey) throw new ModelError('AI_NOT_CONFIGURED', 'AI explanations are not configured yet.', 503);
   if (!question.trim() || question.length > 800) throw new ModelError('INVALID_QUESTION', 'Enter a question of up to 800 characters.', 400);
   if (eventId && (!snapshot.availability.events || !snapshot.events.some(event => event.id === eventId))) throw new ModelError('EVENT_NOT_FOUND', 'That event is no longer available in the current match update.', 409);
-  const facts = buildEvidence(snapshot, eventId);
+  const explicitIncident = resolveIncident(snapshot, question);
+  eventId = explicitIncident ?? eventId;
+  const facts = buildEvidence(snapshot, eventId, Boolean(explicitIncident));
   const metadata = answerMetadata(snapshot, mode, facts);
   if (!facts.some(fact => fact.kind !== 'limitation' && fact.kind !== 'score') && snapshot.score.home === null && snapshot.score.away === null) return { ...metadata, claims: [], limitation: 'There is not enough match information to answer yet. Try again after the next update.' };
   const controller = new AbortController();

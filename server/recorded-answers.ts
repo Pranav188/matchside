@@ -25,7 +25,7 @@ export async function recordedAnswer(snapshot: MatchSnapshot, question: string, 
     // Keep the genuine legacy recording cache during the approved model migration.
     // Its stored model provenance and exact evidence are still validated below.
     const compatibleModel = bundle.model === model || (bundle.model === 'gemini-2.5-flash' && model === 'gemini-3.5-flash-lite');
-    const compatiblePrompt=bundle.promptVersion===AI_PROMPT_VERSION||(bundle.promptVersion==='match-context-v9'&&AI_PROMPT_VERSION==='match-context-v11');
+    const compatiblePrompt=bundle.promptVersion===AI_PROMPT_VERSION||(bundle.promptVersion==='match-context-v9'&&AI_PROMPT_VERSION==='match-context-v12');
     if (bundle.fixtureId !== snapshot.fixtureId || bundle.contentVersion !== snapshot.contentVersion || !compatiblePrompt || !compatibleModel) return null;
     const entry = bundle.entries.find(item => normalizeQuestion(item.question) === normalizeQuestion(question) && item.eventId === eventId);
     if (!entry || (eventId && (!snapshot.availability.events || !snapshot.events.some(event => event.id === eventId)))) return null;

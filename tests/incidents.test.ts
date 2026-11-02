@@ -26,6 +26,11 @@ describe('explicit card questions',()=>{
  });
 });
 describe('fan-facing card explanations',()=>{
+ it('gives the model verified whole-match order without changing saved-evidence defaults',()=>{
+  const s=recording();expect(buildEvidence(s,'158513916').some(f=>f.id.startsWith('order:'))).toBe(false);
+  expect(buildEvidence(s,'158513916',true).find(f=>f.id==='order:158513916')?.text).toContain('yellow card number 4 of 4');
+ });
+
  it('converts a verbatim raw event record to readable facts without changing its sources',()=>{
   const s=recording(),facts=buildEvidence(s,'158513916'),fact=facts.find(f=>f.id==='event:158513916')!;
   const answer:AiAnswer={claims:[{text:fact.text,evidenceIds:[fact.id]}],limitation:null,facts,mode:'example',contentVersion:s.contentVersion,asOf:s.fetchedAt,matchMinute:s.minute,cached:false};
@@ -34,5 +39,5 @@ describe('fan-facing card explanations',()=>{
   expect(result.claims[0].text).toContain('Foul');expect(result.claims[0].text).not.toContain('related player:');
   expect(result.facts).toEqual(facts);expect(result.claims[0].evidenceIds).toEqual([fact.id]);expect(answer.claims[0].text).toBe(fact.text);
  });
- it('uses a new prompt/cache version to exclude older incorrect dynamic answers',()=>expect(AI_PROMPT_VERSION).toBe('match-context-v11'));
+ it('uses a new prompt/cache version to exclude older incorrect dynamic answers',()=>expect(AI_PROMPT_VERSION).toBe('match-context-v12'));
 });
