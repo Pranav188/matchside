@@ -65,6 +65,13 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('live match companion behavior', () => {
+  it('clearly labels reused AI answers as cached', async () => {
+    mockFetch(url => url === '/api/ask' ? json({ ...answer(), cached: true }) : usual(url));
+    await open();
+    await flush(() => fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Who came on?' } }));
+    await flush(() => fireEvent.click(screen.getByRole('button', { name: 'Ask MatchSide' })));
+    expect(screen.getByText('MatchSide answer · Cached')).toBeTruthy();
+  });
   it('shows a neutral loading state instead of claiming the match is disconnected before the first response', async () => {
     const pending = deferred<Response>();
     mockFetch(url => url === '/api/health' ? json(health) : pending.promise);

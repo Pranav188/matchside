@@ -32,3 +32,13 @@ The three reviewers worked on separate frontend, backend and deployment files. T
 Account-linked Vercel build, public deployment, signed-out access, actual hosted AI responses, broad mobile/keyboard QA, successive in-play provider updates and the full real-model evaluation remain open. Unit tests and evidence-reference validation do not establish complete semantic correctness of generated answers.
 
 The completed recorded match is an approved reviewer demonstration, clearly labelled Full-time. Submission is not automated.
+
+## Recorded-answer cache, same-day follow-up
+
+Three actual Gemini answers were generated and manually checked against the Brøndby IF vs AGF facts. The shipped cache preserves each answer's evidence and captured time, is labelled Cached, and does not expire daily. A mismatched question, incident, recording, model, prompt version or evidence is a cache miss. Custom requests still follow normal quotas.
+
+A real generation failure exposed another retrieval bug: a prior substitution was linked to a later card merely because the player matched. A failing regression reproduced it. Related-event retrieval now connects treatment/substitution context while keeping card explanations scoped to the selected card. The evidence/claim validator was retained. Prompt/cache identity is `match-context-v9`.
+
+With all 15 daily app slots reserved, six repeated saved-answer API calls returned HTTP 200 with network access disabled and zero external calls. The reservation count stayed at 15. An uncached request returned HTTP 429. Plain Node emitted-handler tests also serve all three saved answers with no credentials. Browser QA confirmed Enter submission, the Cached label and a source dialog containing the exact possession fact.
+
+159 application tests, typecheck, production build and four packaging checks passed. The isolated official Vercel Node bundle includes both data files and serves all three answers without external requests. Hosted verification remains pending.

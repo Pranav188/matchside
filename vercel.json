@@ -1,6 +1,6 @@
 {
   "buildCommand":"npm run build",
   "outputDirectory":"dist/client",
-  "functions":{"api/*.ts":{"maxDuration":60,"includeFiles":"data/recorded-match.json"}},
+  "functions":{"api/*.ts":{"maxDuration":60,"includeFiles":"data/recorded-*.json"}},
   "headers":[{"source":"/(.*)","headers":[{"key":"X-Content-Type-Options","value":"nosniff"},{"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},{"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=()"}]}]
 }

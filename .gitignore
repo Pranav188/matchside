@@ -8,6 +8,7 @@ coverage/
 data/provider-raw-*.json
 data/evaluation-*.json
 data/ai-evaluation-results.json
+data/.recorded-answers-*.tmp
 qa/
 tmp/
 output/

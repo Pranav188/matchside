@@ -14,6 +14,7 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "probe": "tsx scripts/probe.ts",
     "record": "tsx scripts/record.ts",
+    "cache:recorded": "tsx scripts/cache-recorded-answers.ts",
     "dev:ui": "vite --host 127.0.0.1",
     "dev:api": "tsx watch scripts/dev-api.ts",
     "test:db": "node scripts/test-database.mjs",

@@ -1,0 +1,842 @@
+{
+  "fixtureId": "19713874",
+  "contentVersion": "dc839ba636655a24609eb206",
+  "promptVersion": "match-context-v9",
+  "model": "gemini-2.5-flash",
+  "generatedAt": "2026-11-02T10:17:26.774Z",
+  "entries": [
+    {
+      "question": "What happened in the latest incident?",
+      "eventId": "158513916",
+      "answer": {
+        "claims": [
+          {
+            "text": "In the 90+2' minute, Oliver Villadsen of Brøndby IF received a yellow card for a foul.",
+            "evidenceIds": [
+              "event:158513916"
+            ]
+          },
+          {
+            "text": "Oliver Villadsen is a defender for Brøndby IF.",
+            "evidenceIds": [
+              "player:293:37259994"
+            ]
+          }
+        ],
+        "limitation": null,
+        "facts": [
+          {
+            "id": "score",
+            "text": "Brøndby IF 2; AGF 0. Status: finished. Match minute: 90 + 5.",
+            "kind": "score"
+          },
+          {
+            "id": "stat:possession",
+            "text": "Possession: Brøndby IF 47%; AGF 53%.",
+            "kind": "stat"
+          },
+          {
+            "id": "event:158513916",
+            "text": "90+2' card; Brøndby IF; player: Oliver Villadsen; related player: not supplied; recorded detail: Yellow card · Foul.",
+            "kind": "event"
+          },
+          {
+            "id": "formation:293",
+            "text": "Brøndby IF starting formation: 4-2-3-1.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:52873",
+            "text": "Brøndby IF: Patrick Pentz; shirt 1; position Goalkeeper; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37650889",
+            "text": "Brøndby IF: Christopher Charl Olivier; shirt 3; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:24436859",
+            "text": "Brøndby IF: Frederik Alves; shirt 32; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:23277904",
+            "text": "Brøndby IF: Luis Binks; shirt 4; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:2170250",
+            "text": "Brøndby IF: Marko Divkovic; shirt 24; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:506092",
+            "text": "Brøndby IF: Bartosz Slisz; shirt 99; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37625601",
+            "text": "Brøndby IF: Max Isaac Ejdum; shirt 18; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37678884",
+            "text": "Brøndby IF: Marcus Younis; shirt 21; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:19979663",
+            "text": "Brøndby IF: Mads Frøkjaer-Jensen; shirt 29; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37723662",
+            "text": "Brøndby IF: Olti Hyseni; shirt 7; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37738599",
+            "text": "Brøndby IF: Jacob Brøchner Ambæk; shirt 38; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:205944",
+            "text": "Brøndby IF: Emmanuel Dennis; shirt 17; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37259994",
+            "text": "Brøndby IF: Oliver Villadsen; shirt 2; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37331699",
+            "text": "Brøndby IF: Casper Winther; shirt 15; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37445147",
+            "text": "Brøndby IF: Sho Fukuda; shirt 19; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37522720",
+            "text": "Brøndby IF: Filip Bundgaard Kristensen; shirt 11; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37764879",
+            "text": "Brøndby IF: William Sonne-Schmidt; shirt 50; position Goalkeeper; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37920043",
+            "text": "Brøndby IF: Raphael Canut; shirt 37; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:82841",
+            "text": "Brøndby IF: Daniel Wass; shirt 10; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:83665",
+            "text": "Brøndby IF: Patrick Mortensen; shirt 9; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "formation:2905",
+            "text": "AGF starting formation: 3-4-2-1.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:82808",
+            "text": "AGF: Jesper Hansen; shirt 1; position Goalkeeper; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37324853",
+            "text": "AGF: Eric Kahl; shirt 19; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:84589",
+            "text": "AGF: Frederik Tingager; shirt 5; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:2510440",
+            "text": "AGF: Tobias Mölgaard; shirt 14; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37755718",
+            "text": "AGF: Frederik Emmery; shirt 39; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:10631144",
+            "text": "AGF: Markus Solbakken; shirt 7; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37337584",
+            "text": "AGF: Kristian Arnstad; shirt 10; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37571672",
+            "text": "AGF: Jacob Andersen; shirt 26; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:5967839",
+            "text": "AGF: Callum McCowatt; shirt 18; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:13980925",
+            "text": "AGF: Tobias Bech; shirt 31; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37912018",
+            "text": "AGF: James Bogere; shirt 28; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:1494210",
+            "text": "AGF: Colin Rösler; shirt 25; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:21762796",
+            "text": "AGF: Sebastian Jørgensen; shirt 8; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:289659",
+            "text": "AGF: Gift Links; shirt 11; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:32796892",
+            "text": "AGF: Rasmus Carstensen; shirt 29; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37721945",
+            "text": "AGF: Tómas Kristjánsson; shirt 20; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37750257",
+            "text": "AGF: Luka Callø; shirt 33; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37923323",
+            "text": "AGF: Stefen Tchamche; shirt 27; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:83864",
+            "text": "AGF: Jens Jønsson; shirt 16; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:978889",
+            "text": "AGF: Mads Hedenstad; shirt 21; position Goalkeeper; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          }
+        ],
+        "mode": "example",
+        "contentVersion": "dc839ba636655a24609eb206",
+        "asOf": "2026-11-02T08:15:43.557Z",
+        "matchMinute": 90,
+        "cached": false
+      }
+    },
+    {
+      "question": "What does possession tell us?",
+      "answer": {
+        "claims": [
+          {
+            "text": "Possession: Brøndby IF 47%; AGF 53%.",
+            "evidenceIds": [
+              "stat:possession"
+            ]
+          }
+        ],
+        "limitation": "Possession statistics reflect the amount of time each team had control of the ball, but they do not indicate which team was superior or created better scoring opportunities.",
+        "facts": [
+          {
+            "id": "score",
+            "text": "Brøndby IF 2; AGF 0. Status: finished. Match minute: 90 + 5.",
+            "kind": "score"
+          },
+          {
+            "id": "stat:possession",
+            "text": "Possession: Brøndby IF 47%; AGF 53%.",
+            "kind": "stat"
+          },
+          {
+            "id": "event:158513916",
+            "text": "90+2' card; Brøndby IF; player: Oliver Villadsen; related player: not supplied; recorded detail: Yellow card · Foul.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513821",
+            "text": "At 88', AGF brought on Colin Rösler for Callum McCowatt. Recorded detail: Colin Rösler on for Callum McCowatt.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513730",
+            "text": "85' card; AGF; player: Kristian Arnstad; related player: not supplied; recorded detail: Yellow card · Argument.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513721",
+            "text": "At 84', Brøndby IF brought on Casper Winther for Olti Hyseni. Recorded detail: Casper Winther on for Olti Hyseni.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513682",
+            "text": "At 84', Brøndby IF brought on Daniel Wass for Max Isaac Ejdum. Recorded detail: Daniel Wass on for Max Isaac Ejdum.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513640",
+            "text": "82' goal; Brøndby IF; player: Mads Frøkjaer-Jensen; related player: Filip Bundgaard Kristensen; recorded detail: Goal · Right foot shot.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513606",
+            "text": "At 80', AGF brought on Stefen Tchamche for Tobias Bech. Recorded detail: Stefen Tchamche on for Tobias Bech.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513599",
+            "text": "At 80', AGF brought on Jens Jønsson for Markus Solbakken. Recorded detail: Jens Jønsson on for Markus Solbakken.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513487",
+            "text": "75' card; Brøndby IF; player: Marcus Younis; related player: not supplied; recorded detail: Yellow card · Foul.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513376",
+            "text": "70' card; Brøndby IF; player: Mads Frøkjaer-Jensen; related player: not supplied; recorded detail: Yellow card · Foul.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513365",
+            "text": "At 68', Brøndby IF brought on Oliver Villadsen for Christopher Charl Olivier. Recorded detail: Oliver Villadsen on for Christopher Charl Olivier.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513359",
+            "text": "At 68', Brøndby IF brought on Filip Bundgaard Kristensen for Jacob Brøchner Ambæk. Recorded detail: Filip Bundgaard Kristensen on for Jacob Brøchner Ambæk.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513280",
+            "text": "At 64', Brøndby IF brought on Raphael Canut for Luis Binks. Recorded detail: Raphael Canut on for Luis Binks · Provider reports injury-related substitution.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513261",
+            "text": "At 62', AGF brought on Gift Links for Jacob Andersen. Recorded detail: Gift Links on for Jacob Andersen.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158513250",
+            "text": "At 62', AGF brought on Sebastian Jørgensen for James Bogere. Recorded detail: Sebastian Jørgensen on for James Bogere.",
+            "kind": "event"
+          },
+          {
+            "id": "event:158511868",
+            "text": "31' goal; Brøndby IF; player: Marko Divkovic; related player: Max Isaac Ejdum; recorded detail: Goal · Right foot shot.",
+            "kind": "event"
+          },
+          {
+            "id": "formation:293",
+            "text": "Brøndby IF starting formation: 4-2-3-1.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:52873",
+            "text": "Brøndby IF: Patrick Pentz; shirt 1; position Goalkeeper; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37650889",
+            "text": "Brøndby IF: Christopher Charl Olivier; shirt 3; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:24436859",
+            "text": "Brøndby IF: Frederik Alves; shirt 32; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:23277904",
+            "text": "Brøndby IF: Luis Binks; shirt 4; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:2170250",
+            "text": "Brøndby IF: Marko Divkovic; shirt 24; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:506092",
+            "text": "Brøndby IF: Bartosz Slisz; shirt 99; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37625601",
+            "text": "Brøndby IF: Max Isaac Ejdum; shirt 18; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37678884",
+            "text": "Brøndby IF: Marcus Younis; shirt 21; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:19979663",
+            "text": "Brøndby IF: Mads Frøkjaer-Jensen; shirt 29; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37723662",
+            "text": "Brøndby IF: Olti Hyseni; shirt 7; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37738599",
+            "text": "Brøndby IF: Jacob Brøchner Ambæk; shirt 38; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:205944",
+            "text": "Brøndby IF: Emmanuel Dennis; shirt 17; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37259994",
+            "text": "Brøndby IF: Oliver Villadsen; shirt 2; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37331699",
+            "text": "Brøndby IF: Casper Winther; shirt 15; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37445147",
+            "text": "Brøndby IF: Sho Fukuda; shirt 19; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37522720",
+            "text": "Brøndby IF: Filip Bundgaard Kristensen; shirt 11; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37764879",
+            "text": "Brøndby IF: William Sonne-Schmidt; shirt 50; position Goalkeeper; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37920043",
+            "text": "Brøndby IF: Raphael Canut; shirt 37; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:82841",
+            "text": "Brøndby IF: Daniel Wass; shirt 10; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:83665",
+            "text": "Brøndby IF: Patrick Mortensen; shirt 9; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "formation:2905",
+            "text": "AGF starting formation: 3-4-2-1.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:82808",
+            "text": "AGF: Jesper Hansen; shirt 1; position Goalkeeper; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37324853",
+            "text": "AGF: Eric Kahl; shirt 19; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:84589",
+            "text": "AGF: Frederik Tingager; shirt 5; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:2510440",
+            "text": "AGF: Tobias Mölgaard; shirt 14; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37755718",
+            "text": "AGF: Frederik Emmery; shirt 39; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:10631144",
+            "text": "AGF: Markus Solbakken; shirt 7; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37337584",
+            "text": "AGF: Kristian Arnstad; shirt 10; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37571672",
+            "text": "AGF: Jacob Andersen; shirt 26; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:5967839",
+            "text": "AGF: Callum McCowatt; shirt 18; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:13980925",
+            "text": "AGF: Tobias Bech; shirt 31; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37912018",
+            "text": "AGF: James Bogere; shirt 28; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:1494210",
+            "text": "AGF: Colin Rösler; shirt 25; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:21762796",
+            "text": "AGF: Sebastian Jørgensen; shirt 8; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:289659",
+            "text": "AGF: Gift Links; shirt 11; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:32796892",
+            "text": "AGF: Rasmus Carstensen; shirt 29; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37721945",
+            "text": "AGF: Tómas Kristjánsson; shirt 20; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37750257",
+            "text": "AGF: Luka Callø; shirt 33; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37923323",
+            "text": "AGF: Stefen Tchamche; shirt 27; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:83864",
+            "text": "AGF: Jens Jønsson; shirt 16; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:978889",
+            "text": "AGF: Mads Hedenstad; shirt 21; position Goalkeeper; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          }
+        ],
+        "mode": "example",
+        "contentVersion": "dc839ba636655a24609eb206",
+        "asOf": "2026-11-02T08:15:43.557Z",
+        "matchMinute": 90,
+        "cached": false
+      }
+    },
+    {
+      "question": "Who came on and who went off?",
+      "eventId": "158513821",
+      "answer": {
+        "claims": [
+          {
+            "text": "At 88', AGF brought on Colin Rösler for Callum McCowatt.",
+            "evidenceIds": [
+              "event:158513821"
+            ]
+          },
+          {
+            "text": "Colin Rösler plays as a Defender for AGF.",
+            "evidenceIds": [
+              "player:2905:1494210"
+            ]
+          },
+          {
+            "text": "Callum McCowatt plays as an Attacker for AGF.",
+            "evidenceIds": [
+              "player:2905:5967839"
+            ]
+          }
+        ],
+        "limitation": null,
+        "facts": [
+          {
+            "id": "score",
+            "text": "Brøndby IF 2; AGF 0. Status: finished. Match minute: 90 + 5.",
+            "kind": "score"
+          },
+          {
+            "id": "stat:possession",
+            "text": "Possession: Brøndby IF 47%; AGF 53%.",
+            "kind": "stat"
+          },
+          {
+            "id": "event:158513821",
+            "text": "At 88', AGF brought on Colin Rösler for Callum McCowatt. Recorded detail: Colin Rösler on for Callum McCowatt.",
+            "kind": "event"
+          },
+          {
+            "id": "formation:293",
+            "text": "Brøndby IF starting formation: 4-2-3-1.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:52873",
+            "text": "Brøndby IF: Patrick Pentz; shirt 1; position Goalkeeper; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37650889",
+            "text": "Brøndby IF: Christopher Charl Olivier; shirt 3; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:24436859",
+            "text": "Brøndby IF: Frederik Alves; shirt 32; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:23277904",
+            "text": "Brøndby IF: Luis Binks; shirt 4; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:2170250",
+            "text": "Brøndby IF: Marko Divkovic; shirt 24; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:506092",
+            "text": "Brøndby IF: Bartosz Slisz; shirt 99; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37625601",
+            "text": "Brøndby IF: Max Isaac Ejdum; shirt 18; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37678884",
+            "text": "Brøndby IF: Marcus Younis; shirt 21; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:19979663",
+            "text": "Brøndby IF: Mads Frøkjaer-Jensen; shirt 29; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37723662",
+            "text": "Brøndby IF: Olti Hyseni; shirt 7; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37738599",
+            "text": "Brøndby IF: Jacob Brøchner Ambæk; shirt 38; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:205944",
+            "text": "Brøndby IF: Emmanuel Dennis; shirt 17; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37259994",
+            "text": "Brøndby IF: Oliver Villadsen; shirt 2; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37331699",
+            "text": "Brøndby IF: Casper Winther; shirt 15; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37445147",
+            "text": "Brøndby IF: Sho Fukuda; shirt 19; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37522720",
+            "text": "Brøndby IF: Filip Bundgaard Kristensen; shirt 11; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37764879",
+            "text": "Brøndby IF: William Sonne-Schmidt; shirt 50; position Goalkeeper; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:37920043",
+            "text": "Brøndby IF: Raphael Canut; shirt 37; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:82841",
+            "text": "Brøndby IF: Daniel Wass; shirt 10; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:293:83665",
+            "text": "Brøndby IF: Patrick Mortensen; shirt 9; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "formation:2905",
+            "text": "AGF starting formation: 3-4-2-1.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:82808",
+            "text": "AGF: Jesper Hansen; shirt 1; position Goalkeeper; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37324853",
+            "text": "AGF: Eric Kahl; shirt 19; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:84589",
+            "text": "AGF: Frederik Tingager; shirt 5; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:2510440",
+            "text": "AGF: Tobias Mölgaard; shirt 14; position Defender; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37755718",
+            "text": "AGF: Frederik Emmery; shirt 39; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:10631144",
+            "text": "AGF: Markus Solbakken; shirt 7; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37337584",
+            "text": "AGF: Kristian Arnstad; shirt 10; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37571672",
+            "text": "AGF: Jacob Andersen; shirt 26; position Midfielder; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:5967839",
+            "text": "AGF: Callum McCowatt; shirt 18; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:13980925",
+            "text": "AGF: Tobias Bech; shirt 31; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37912018",
+            "text": "AGF: James Bogere; shirt 28; position Attacker; starting lineup. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:1494210",
+            "text": "AGF: Colin Rösler; shirt 25; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:21762796",
+            "text": "AGF: Sebastian Jørgensen; shirt 8; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:289659",
+            "text": "AGF: Gift Links; shirt 11; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:32796892",
+            "text": "AGF: Rasmus Carstensen; shirt 29; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37721945",
+            "text": "AGF: Tómas Kristjánsson; shirt 20; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37750257",
+            "text": "AGF: Luka Callø; shirt 33; position Defender; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:37923323",
+            "text": "AGF: Stefen Tchamche; shirt 27; position Attacker; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:83864",
+            "text": "AGF: Jens Jønsson; shirt 16; position Midfielder; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          },
+          {
+            "id": "player:2905:978889",
+            "text": "AGF: Mads Hedenstad; shirt 21; position Goalkeeper; substitute list. A substitute listing alone does not confirm participation.",
+            "kind": "lineup"
+          }
+        ],
+        "mode": "example",
+        "contentVersion": "dc839ba636655a24609eb206",
+        "asOf": "2026-11-02T08:15:43.557Z",
+        "matchMinute": 90,
+        "cached": false
+      }
+    }
+  ]
+}

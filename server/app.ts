@@ -9,6 +9,7 @@ import { fetchFixture } from './provider.ts';
 import { buildEvidence, generateAnswer, AI_PROMPT_VERSION } from './ai.ts';
 import { sessionFromCookie } from './session.ts';
 import { recordedExample } from './example.ts';
+import { recordedAnswer } from './recorded-answers.ts';
 import type { Mode, MatchResponse } from '../shared/contracts.ts';
 const bodySchema=z.object({mode:z.enum(['live','example']),question:z.string().trim().min(3).max(400),eventId:z.string().min(1).max(100).optional()}).strict();
 function json(value:unknown,status=200,headers:Record<string,string>={}) {return new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...headers}});}
@@ -60,10 +61,19 @@ async function routeRequest(request:Request):Promise<Response> {
       if(Number(request.headers.get('content-length')??0)>4096) throw new AppError('QUESTION_TOO_LARGE','The question is too long.',413);
       const raw=await boundedBody(request);
       let data;try {data=bodySchema.parse(JSON.parse(raw));}catch {throw new AppError('INVALID_QUESTION','Choose a mode and enter a question between 3 and 400 characters.',400);}
-      const config=getConfig();assertAiConfig(config);
+      const config=getConfig();
+      let result:MatchResponse|undefined;
+      if(data.mode==='example') {
+        result=await match('example');
+        if(result.snapshot) {
+          const saved=await recordedAnswer(result.snapshot,data.question,data.eventId,config.model);
+          if(saved)return json(saved);
+        }
+      }
+      assertAiConfig(config);
       const session=sessionFromCookie(request.headers.get('cookie'),config.sessionSecret);
       const headers:Record<string,string>=session.setCookie?{'Set-Cookie':session.setCookie}:{};
-      const result=await match(data.mode);
+      result??=await match(data.mode);
       if(!result.snapshot) throw new AppError('NO_MATCH_DATA','Match information is not available yet. Please retry after it connects.');
       if(result.freshness==='stale') throw new AppError('STALE_MATCH','Match updates are delayed. Please wait for a successful refresh before asking AI.');
       const snapshot=result.snapshot; // Capture one immutable evidence version before generation.

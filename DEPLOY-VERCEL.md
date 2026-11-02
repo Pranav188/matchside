@@ -4,7 +4,7 @@ Prepared 2 November 2026. This guide deploys the React site and its three Node A
 
 ## What is ready, and what is still unverified
 
-- `vercel.json` builds with `npm run build`, serves `dist/client`, and bundles `data/recorded-match.json` into the API functions.
+- `vercel.json` builds with `npm run build`, serves `dist/client`, and bundles the recorded match and `data/recorded-answers.json` into the API functions.
 - API files use Vercel's supported `export default { fetch }` Web Request/Response interface. [Node runtime documentation](https://vercel.com/docs/functions/runtimes/node-js)
 - A deployment-only bug was reproduced and fixed: emitted JavaScript imported `.ts` paths that were absent from the function bundle. `rewriteRelativeImportExtensions` now produces `.js` imports. A regression loads the emitted handlers in plain Node, without `tsx`, and reads the genuine recording. [TypeScript option](https://www.typescriptlang.org/tsconfig/rewriteRelativeImportExtensions.html)
 - An isolated check with the official Vercel Node builder passed: the handler loaded, the recording was bundled, and no `.env` file was included. This is a bundling check, not a hosted deployment.
@@ -78,7 +78,7 @@ Open the **production domain** in a private/incognito browser window where you a
 2. Open `/api/health`. Expect JSON with `status: "ready"`. This confirms configuration presence, not that every upstream service works.
 3. Open `/api/match?mode=live`. Expect genuine configured fixture data. **Upcoming** is correct before kickoff; do not relabel it live.
 4. Open `/api/match?mode=example`. Expect `mode: "example"`, genuine Brøndby–AGF data, and full-time status. This checks that the recording made it into the function bundle.
-5. In the page, choose **Recorded match**. Ask **Who came on?** once and open the answer's source link. Expect an actual AI answer with the matching recorded substitution and evidence. This may consume one generation.
+5. In the page, choose **Recorded match**. Ask **Who came on?** once and open the answer's source link. Expect a genuine saved Gemini answer labelled **Cached**, with the matching recorded substitution and evidence. The three suggested questions do not consume another generation. Custom questions still use the quota-controlled AI path.
 6. Switch between the two sources, type a different draft in each, and return. The drafts and match data should stay separate; warm switches should not flash a disconnected state.
 7. Check Lineups, a selected incident, Enter to submit, Shift+Enter, source-dialog close/focus, and a narrow mobile viewport.
 8. In Vercel, inspect the deployment's **Logs** for failed API requests. Do not paste keys, connection strings or full environment output into a report.

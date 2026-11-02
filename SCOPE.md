@@ -41,6 +41,10 @@ Three real generation attempts were made through the shared API handler with rea
 
 The claim references the corresponding substitution event and retains the exact source snapshot version. The response and selected provider event are saved in `qa/real-ai-smoke-2026-11-02.json`. This validates one integration path on completed-match data; it is not a live observation, genuine in-play recording or passed evaluation set. No local web server was started for this check.
 
+## Recorded-answer availability
+
+Three genuine Gemini responses for the recorded fixture are saved in `data/recorded-answers.json` and labelled Cached in the interface. They are served before database and model calls, without a daily expiry, only for their exact question/context and matching recording, evidence, model and prompt version. Custom questions retain normal quota checks. Regenerate with `npm run cache:recorded -- --confirm` after intentional recording/prompt changes; this consumes available free quota and stops on errors.
+
 ## Remaining release work
 
 Deploy with authorization, verify public access and actual AI responses, and finish the recorded-mode reviewer flow. The full 20-case real-model evaluation, actual in-play updates and broad device QA remain incomplete and must not be claimed as passed. Current local verification is documented separately from those outstanding integration checks. Submission is not automated.

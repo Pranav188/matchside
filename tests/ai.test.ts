@@ -31,6 +31,16 @@ describe('bounded match evidence', () => {
     );
     expect(buildEvidence(snapshot, 'selected-card').filter(f => f.kind === 'event').map(f => f.id)).toEqual(['event:selected-card']);
   });
+  it('does not link an earlier substitution to a later card merely because the player matches', () => {
+    const snapshot = unitSnapshot();
+    snapshot.events.push({ ...snapshot.events[0], id: 'later-card', type: 'card', minute: 90, player: 'Luis Silva', relatedPlayer: null, detail: 'Yellow card · Foul' });
+    expect(buildEvidence(snapshot, 'later-card').filter(fact => fact.kind === 'event').map(fact => fact.id)).toEqual(['event:later-card']);
+  });
+  it('still connects treatment and substitution records for the same player', () => {
+    const snapshot = unitSnapshot();
+    snapshot.events.unshift({ ...snapshot.events[0], id: 'treatment', type: 'other', minute: 5, player: 'Kai Patel', relatedPlayer: null, detail: 'Receiving treatment' });
+    expect(buildEvidence(snapshot, 'sub-1').filter(fact => fact.kind === 'event').map(fact => fact.id)).toEqual(['event:sub-1', 'event:treatment']);
+  });
   it('excludes ambiguous provider ordinal labels from incident evidence', () => {
     const snapshot = unitSnapshot();
     snapshot.events = [{ ...snapshot.events[0], type: 'card', detail: 'Yellow card · Foul · 4th Yellowcard' }];

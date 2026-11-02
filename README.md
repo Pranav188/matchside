@@ -11,6 +11,8 @@ I built MatchSide after watching Abha vs Al-Ittihad on FanCode. An injury, subst
 - Select an incident or ask a match question. Gemini answers using the supplied facts, with source links for each claim.
 - Switch between the configured current fixture and a genuine recorded Brøndby IF vs AGF match, clearly labelled **Full-time**.
 
+The recorded demo's three suggested questions use saved Gemini answers, labelled **Cached**. They remain available without a new Gemini or database request. Custom questions still require available quota. Saved answers are invalidated if their recording, evidence, model or prompt version changes.
+
 The interface takes cues from FanCode's charcoal and orange palette. It has its own branding and works alongside your broadcaster. There is no embedded stream or official FanCode integration.
 
 ## Run locally
