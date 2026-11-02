@@ -1,10 +1,14 @@
+import { keepsIncidentContext } from '../shared/questions.ts';
 import { AppError } from './errors.ts';
 import type { AiAnswer, MatchSnapshot } from '../shared/contracts.ts';
 const ordinals: Record<string,number>={first:1,second:2,third:3,fourth:4,fifth:5,sixth:6,seventh:7,eighth:8,ninth:9,tenth:10};
 /** Resolve explicit whole-match card references before retrieval or model inference. */
 export function resolveIncident(snapshot:MatchSnapshot,question:string,selectedId?:string):string|undefined {
  const matches=[...question.matchAll(/\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|\d+(?:st|nd|rd|th))\s+(yellow(?:\s+card)?|red(?:\s+card)?|card|booking)\b/gi)];
- if(!matches.length)return selectedId;
+ if(!matches.length) {
+  const selected=snapshot.events.find(event=>event.id===selectedId);
+  return selected && !keepsIncidentContext(question,selected.type) ? undefined : selectedId;
+ }
  if(matches.length>1)throw new AppError('AMBIGUOUS_INCIDENT','Ask about one incident at a time, or select a card in Match moments.',422);
  if(!snapshot.availability.events)throw new AppError('NO_EVENT_DATA','The match event feed is not available yet.',422);
  const lower=question.toLocaleLowerCase();

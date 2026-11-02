@@ -382,6 +382,23 @@ describe('live match companion behavior', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
+  it.each(['What does possession tell us?', 'Why was the fourth yellow card shown?'])('drops unrelated incident context when the fan types %s', async question => {
+    const fetcher = mockFetch(url => url === '/api/ask' ? json(answer()) : usual(url));
+    await open();
+    await flush(() => fireEvent.click(screen.getByRole('button', { name: /Incoming Player on for Outgoing Player/ })));
+    await flush(() => fireEvent.change(screen.getByRole('textbox'), { target: { value: question } }));
+    expect(screen.queryByRole('button', { name: 'Clear selected incident' })).toBeNull();
+    await flush(() => fireEvent.click(screen.getByRole('button', { name: 'Ask MatchSide' })));
+    const ask = fetcher.mock.calls.find(([url]) => url === '/api/ask');
+    expect(JSON.parse(String(ask?.[1]?.body)).eventId).toBeUndefined();
+  });
+  it('preserves selected incident context when the fan types a follow-up', async () => {
+    mockFetch(usual); await open();
+    await flush(() => fireEvent.click(screen.getByRole('button', { name: /Incoming Player on for Outgoing Player/ })));
+    await flush(() => fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Why did he go off?' } }));
+    expect(screen.getByRole('button', { name: 'Clear selected incident' })).toBeTruthy();
+  });
+
   it('labels inline source actions and opens only the facts cited by each statement', async () => {
     const response = answer();
     response.facts.push({ id: 'fact-2', text: 'Another recorded match fact.', kind: 'event' });

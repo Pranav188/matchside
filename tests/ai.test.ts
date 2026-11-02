@@ -139,6 +139,15 @@ describe('real Gemini protocol, mocked transport', () => {
     expect((await generateAnswer(request, asFetch(modelResponse(valid())))).mode).toBe('example');
     expect(JSON.stringify(request.snapshot)).toBe(before);
   });
+  it('turns an unsupported-detail refusal into a safe explanation rather than an API error', async () => {
+    const fetcher = asFetch(modelResponse({ claims: [], limitation: 'Richard Rios injury details are not available in this match data.' }));
+    const answer = await generateAnswer({ ...input(), question: 'What injury did Richard Rios suffer?' }, fetcher);
+    expect(answer.claims).toEqual([]);
+    expect(answer.limitation).toContain('not available');
+    expect(answer.limitation).not.toContain('Richard Rios');
+    expect(fetcher).toHaveBeenCalledTimes(1);
+  });
+
   it('rejects an unsupported model without making a request', async () => {
     const fetcher = asFetch(modelResponse(valid()));
     await expect(generateAnswer({ ...input(), model: '../../other-model' }, fetcher)).rejects.toMatchObject({ code: 'AI_CONFIGURATION' });

@@ -165,7 +165,14 @@ export async function generateAnswer({ snapshot, mode, question, eventId, apiKey
     let parsed: z.infer<typeof responseSchema>;
     try { parsed = responseSchema.parse(JSON.parse(text)); }
     catch { throw new ModelError('AI_INVALID_RESPONSE', 'The explanation format was invalid. Please try again.'); }
-    verifyClaims(parsed, facts, snapshot, eventId);
+    try { verifyClaims(parsed, facts, snapshot, eventId); }
+    catch (error) {
+      // A refusal may repeat a name from the question that is absent from evidence.
+      // Replace that unsupported refusal text, never a rejected factual claim.
+      if (parsed.claims.length || !parsed.limitation || !(error instanceof ModelError)) throw error;
+      parsed.limitation = 'That information is not available in the supplied match data. Ask about recorded incidents, possession or starting lineups.';
+      verifyClaims(parsed, facts, snapshot, eventId);
+    }
     return readableAnswer(snapshot, { ...metadata, ...parsed });
   } catch (error) {
     if (error instanceof ModelError) throw error;

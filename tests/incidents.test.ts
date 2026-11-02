@@ -25,6 +25,13 @@ describe('explicit card questions',()=>{
   const s=recording();s.availability.events=false;expect(()=>resolveIncident(s,'fourth yellow card')).toThrow(/not available/i);
  });
 });
+describe('changing question context',()=>{
+ it.each(['Who came on and who went off?','What does possession tell us?','Who scored the goals?','Any yellow cards?','What starting formations are recorded?'])('does not restrict %s to a previously selected card',question=>{
+  expect(resolveIncident(recording(),question,'158513730')).toBeUndefined();
+ });
+ it('keeps the selected substitution for its suggested question',()=>expect(resolveIncident(recording(),'Who came on and who went off?','158513821')).toBe('158513821'));
+ it('keeps a selected card for a follow-up about that player',()=>expect(resolveIncident(recording(),'Why was he booked?','158513730')).toBe('158513730'));
+});
 describe('fan-facing card explanations',()=>{
  it('gives the model verified whole-match order without changing saved-evidence defaults',()=>{
   const s=recording();expect(buildEvidence(s,'158513916').some(f=>f.id.startsWith('order:'))).toBe(false);
