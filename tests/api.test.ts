@@ -1,0 +1,14 @@
+import {describe,it,expect,beforeEach,vi}from'vitest';
+import{handleRequest}from'../server/app.ts';
+beforeEach(()=>{vi.stubEnv('RECORDED_SNAPSHOT_PATH','data/nonexistent-api-unit-test-recording.json');for(const key of ['SPORTMONKS_API_TOKEN','SPORTMONKS_FIXTURE_ID','DATABASE_URL','SESSION_SECRET','GEMINI_API_KEY'])vi.stubEnv(key,'');});
+describe('real HTTP boundary without credentials',()=>{
+ it('reports setup requirements without secrets',async()=>{const r=await handleRequest(new Request('http://localhost/api/health'));expect(r.status).toBe(200);const b=await r.json();expect(b.status).toBe('setup-required');expect(b.services.database).toBe(false);});
+ it('does not invent match data when configuration is missing',async()=>{const r=await handleRequest(new Request('http://localhost/api/match'));expect(r.status).toBe(503);expect((await r.json()).error.code).toBe('SETUP_REQUIRED');});
+ it('never silently substitutes a recording for live data',async()=>{const r=await handleRequest(new Request('http://localhost/api/match?mode=example'));expect(r.status).toBe(503);expect((await r.json()).error.code).toBe('EXAMPLE_UNAVAILABLE');});
+ it('rejects invalid modes and methods',async()=>{expect((await handleRequest(new Request('http://localhost/api/match?mode=arbitrary'))).status).toBe(400);expect((await handleRequest(new Request('http://localhost/api/ask'))).status).toBe(405);});
+ it('rejects cross-origin AI dispatch before any credentials',async()=>{const r=await handleRequest(new Request('http://localhost/api/ask',{method:'POST',headers:{origin:'https://other.example','content-type':'application/json'},body:'{}'}));expect(r.status).toBe(403);});
+ it('validates JSON and question shape at real boundary',async()=>{const r=await handleRequest(new Request('http://localhost/api/ask',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'live',question:'ok',fixtureId:'not-allowed'})}));expect(r.status).toBe(400);});
+ it('does not expose arbitrary routes',async()=>{expect((await handleRequest(new Request('http://localhost/api/provider?url=anything'))).status).toBe(404);});
+ it('retains the signed session even on validation failure',async()=>{vi.stubEnv('SESSION_SECRET','test-secret-which-is-long-enough-for-session');const r=await handleRequest(new Request('http://localhost/api/ask',{method:'POST',headers:{'content-type':'application/json'},body:'{}'}));expect(r.status).toBe(400);expect(r.headers.get('set-cookie')).toContain('HttpOnly');});
+ it('recovers from malformed session signatures at the HTTP boundary',async()=>{vi.stubEnv('SESSION_SECRET','test-secret-which-is-long-enough-for-session');const cookie=`matchside_session=00000000-0000-0000-0000-000000000000.${Date.now()}.${'é'.repeat(43)}`;const r=await handleRequest(new Request('http://localhost/api/health',{headers:{cookie}}));expect(r.status).toBe(200);expect(r.headers.get('set-cookie')).toContain('HttpOnly');});
+});

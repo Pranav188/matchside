@@ -1,0 +1,586 @@
+{
+  "fixtureId": "19713874",
+  "leagueId": 271,
+  "competition": "Superliga",
+  "kickoff": "2026-11-01T17:00:00.000Z",
+  "teams": [
+    {
+      "id": "293",
+      "name": "Brøndby IF",
+      "shortName": "BIF",
+      "side": "home"
+    },
+    {
+      "id": "2905",
+      "name": "AGF",
+      "shortName": "AGF",
+      "side": "away"
+    }
+  ],
+  "score": {
+    "home": 2,
+    "away": 0
+  },
+  "status": "finished",
+  "minute": 90,
+  "addedMinute": 5,
+  "events": [
+    {
+      "id": "158511868",
+      "type": "goal",
+      "minute": 31,
+      "addedMinute": null,
+      "period": 1,
+      "teamId": "293",
+      "player": "Marko Divkovic",
+      "relatedPlayer": "Max Isaac Ejdum",
+      "detail": "Goal · Right foot shot · 1st Goal",
+      "order": 1
+    },
+    {
+      "id": "158513250",
+      "type": "substitution",
+      "minute": 62,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "2905",
+      "player": "Sebastian Jørgensen",
+      "relatedPlayer": "James Bogere",
+      "detail": "Sebastian Jørgensen on for James Bogere · 1st Substitution",
+      "order": 1
+    },
+    {
+      "id": "158513261",
+      "type": "substitution",
+      "minute": 62,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "2905",
+      "player": "Gift Links",
+      "relatedPlayer": "Jacob Andersen",
+      "detail": "Gift Links on for Jacob Andersen · 2nd Substitution",
+      "order": 2
+    },
+    {
+      "id": "158513280",
+      "type": "substitution",
+      "minute": 64,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Raphael Canut",
+      "relatedPlayer": "Luis Binks",
+      "detail": "Raphael Canut on for Luis Binks · Provider reports injury-related substitution · 3rd Substitution",
+      "order": 3
+    },
+    {
+      "id": "158513359",
+      "type": "substitution",
+      "minute": 68,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Filip Bundgaard Kristensen",
+      "relatedPlayer": "Jacob Brøchner Ambæk",
+      "detail": "Filip Bundgaard Kristensen on for Jacob Brøchner Ambæk · 4th Substitution",
+      "order": 4
+    },
+    {
+      "id": "158513365",
+      "type": "substitution",
+      "minute": 68,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Oliver Villadsen",
+      "relatedPlayer": "Christopher Charl Olivier",
+      "detail": "Oliver Villadsen on for Christopher Charl Olivier · 5th Substitution",
+      "order": 5
+    },
+    {
+      "id": "158513376",
+      "type": "card",
+      "minute": 70,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Mads Frøkjaer-Jensen",
+      "relatedPlayer": null,
+      "detail": "Yellow card · Foul · 1st Yellowcard",
+      "order": 1
+    },
+    {
+      "id": "158513487",
+      "type": "card",
+      "minute": 75,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Marcus Younis",
+      "relatedPlayer": null,
+      "detail": "Yellow card · Foul · 2nd Yellowcard",
+      "order": 2
+    },
+    {
+      "id": "158513599",
+      "type": "substitution",
+      "minute": 80,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "2905",
+      "player": "Jens Jønsson",
+      "relatedPlayer": "Markus Solbakken",
+      "detail": "Jens Jønsson on for Markus Solbakken · 6th Substitution",
+      "order": 6
+    },
+    {
+      "id": "158513606",
+      "type": "substitution",
+      "minute": 80,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "2905",
+      "player": "Stefen Tchamche",
+      "relatedPlayer": "Tobias Bech",
+      "detail": "Stefen Tchamche on for Tobias Bech · 7th Substitution",
+      "order": 7
+    },
+    {
+      "id": "158513640",
+      "type": "goal",
+      "minute": 82,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Mads Frøkjaer-Jensen",
+      "relatedPlayer": "Filip Bundgaard Kristensen",
+      "detail": "Goal · Right foot shot · 2nd Goal",
+      "order": 2
+    },
+    {
+      "id": "158513682",
+      "type": "substitution",
+      "minute": 84,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Daniel Wass",
+      "relatedPlayer": "Max Isaac Ejdum",
+      "detail": "Daniel Wass on for Max Isaac Ejdum · 8th Substitution",
+      "order": 8
+    },
+    {
+      "id": "158513721",
+      "type": "substitution",
+      "minute": 84,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "293",
+      "player": "Casper Winther",
+      "relatedPlayer": "Olti Hyseni",
+      "detail": "Casper Winther on for Olti Hyseni · 9th Substitution",
+      "order": 9
+    },
+    {
+      "id": "158513730",
+      "type": "card",
+      "minute": 85,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "2905",
+      "player": "Kristian Arnstad",
+      "relatedPlayer": null,
+      "detail": "Yellow card · Argument · 3rd Yellowcard",
+      "order": 3
+    },
+    {
+      "id": "158513821",
+      "type": "substitution",
+      "minute": 88,
+      "addedMinute": null,
+      "period": 2,
+      "teamId": "2905",
+      "player": "Colin Rösler",
+      "relatedPlayer": "Callum McCowatt",
+      "detail": "Colin Rösler on for Callum McCowatt · 10th Substitution",
+      "order": 10
+    },
+    {
+      "id": "158513916",
+      "type": "card",
+      "minute": 90,
+      "addedMinute": 2,
+      "period": 2,
+      "teamId": "293",
+      "player": "Oliver Villadsen",
+      "relatedPlayer": null,
+      "detail": "Yellow card · Foul · 4th Yellowcard",
+      "order": 4
+    }
+  ],
+  "lineups": [
+    {
+      "teamId": "293",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "id": "52873",
+          "name": "Patrick Pentz",
+          "number": 1,
+          "position": "Goalkeeper",
+          "starter": true,
+          "formationField": "1:1"
+        },
+        {
+          "id": "37650889",
+          "name": "Christopher Charl Olivier",
+          "number": 3,
+          "position": "Defender",
+          "starter": true,
+          "formationField": "2:1"
+        },
+        {
+          "id": "24436859",
+          "name": "Frederik Alves",
+          "number": 32,
+          "position": "Defender",
+          "starter": true,
+          "formationField": "2:2"
+        },
+        {
+          "id": "23277904",
+          "name": "Luis Binks",
+          "number": 4,
+          "position": "Defender",
+          "starter": true,
+          "formationField": "2:3"
+        },
+        {
+          "id": "2170250",
+          "name": "Marko Divkovic",
+          "number": 24,
+          "position": "Defender",
+          "starter": true,
+          "formationField": "2:4"
+        },
+        {
+          "id": "506092",
+          "name": "Bartosz Slisz",
+          "number": 99,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "3:1"
+        },
+        {
+          "id": "37625601",
+          "name": "Max Isaac Ejdum",
+          "number": 18,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "3:2"
+        },
+        {
+          "id": "37678884",
+          "name": "Marcus Younis",
+          "number": 21,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "4:1"
+        },
+        {
+          "id": "19979663",
+          "name": "Mads Frøkjaer-Jensen",
+          "number": 29,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "4:2"
+        },
+        {
+          "id": "37723662",
+          "name": "Olti Hyseni",
+          "number": 7,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "4:3"
+        },
+        {
+          "id": "37738599",
+          "name": "Jacob Brøchner Ambæk",
+          "number": 38,
+          "position": "Attacker",
+          "starter": true,
+          "formationField": "5:1"
+        },
+        {
+          "id": "205944",
+          "name": "Emmanuel Dennis",
+          "number": 17,
+          "position": "Attacker",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37259994",
+          "name": "Oliver Villadsen",
+          "number": 2,
+          "position": "Defender",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37331699",
+          "name": "Casper Winther",
+          "number": 15,
+          "position": "Midfielder",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37445147",
+          "name": "Sho Fukuda",
+          "number": 19,
+          "position": "Attacker",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37522720",
+          "name": "Filip Bundgaard Kristensen",
+          "number": 11,
+          "position": "Attacker",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37764879",
+          "name": "William Sonne-Schmidt",
+          "number": 50,
+          "position": "Goalkeeper",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37920043",
+          "name": "Raphael Canut",
+          "number": 37,
+          "position": "Defender",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "82841",
+          "name": "Daniel Wass",
+          "number": 10,
+          "position": "Midfielder",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "83665",
+          "name": "Patrick Mortensen",
+          "number": 9,
+          "position": "Attacker",
+          "starter": false,
+          "formationField": null
+        }
+      ]
+    },
+    {
+      "teamId": "2905",
+      "formation": "3-4-2-1",
+      "players": [
+        {
+          "id": "82808",
+          "name": "Jesper Hansen",
+          "number": 1,
+          "position": "Goalkeeper",
+          "starter": true,
+          "formationField": "1:1"
+        },
+        {
+          "id": "37324853",
+          "name": "Eric Kahl",
+          "number": 19,
+          "position": "Defender",
+          "starter": true,
+          "formationField": "2:1"
+        },
+        {
+          "id": "84589",
+          "name": "Frederik Tingager",
+          "number": 5,
+          "position": "Defender",
+          "starter": true,
+          "formationField": "2:2"
+        },
+        {
+          "id": "2510440",
+          "name": "Tobias Mölgaard",
+          "number": 14,
+          "position": "Defender",
+          "starter": true,
+          "formationField": "2:3"
+        },
+        {
+          "id": "37755718",
+          "name": "Frederik Emmery",
+          "number": 39,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "3:1"
+        },
+        {
+          "id": "10631144",
+          "name": "Markus Solbakken",
+          "number": 7,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "3:2"
+        },
+        {
+          "id": "37337584",
+          "name": "Kristian Arnstad",
+          "number": 10,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "3:3"
+        },
+        {
+          "id": "37571672",
+          "name": "Jacob Andersen",
+          "number": 26,
+          "position": "Midfielder",
+          "starter": true,
+          "formationField": "3:4"
+        },
+        {
+          "id": "5967839",
+          "name": "Callum McCowatt",
+          "number": 18,
+          "position": "Attacker",
+          "starter": true,
+          "formationField": "4:1"
+        },
+        {
+          "id": "13980925",
+          "name": "Tobias Bech",
+          "number": 31,
+          "position": "Attacker",
+          "starter": true,
+          "formationField": "4:2"
+        },
+        {
+          "id": "37912018",
+          "name": "James Bogere",
+          "number": 28,
+          "position": "Attacker",
+          "starter": true,
+          "formationField": "5:1"
+        },
+        {
+          "id": "1494210",
+          "name": "Colin Rösler",
+          "number": 25,
+          "position": "Defender",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "21762796",
+          "name": "Sebastian Jørgensen",
+          "number": 8,
+          "position": "Midfielder",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "289659",
+          "name": "Gift Links",
+          "number": 11,
+          "position": "Midfielder",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "32796892",
+          "name": "Rasmus Carstensen",
+          "number": 29,
+          "position": "Defender",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37721945",
+          "name": "Tómas Kristjánsson",
+          "number": 20,
+          "position": "Attacker",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37750257",
+          "name": "Luka Callø",
+          "number": 33,
+          "position": "Defender",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "37923323",
+          "name": "Stefen Tchamche",
+          "number": 27,
+          "position": "Attacker",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "83864",
+          "name": "Jens Jønsson",
+          "number": 16,
+          "position": "Midfielder",
+          "starter": false,
+          "formationField": null
+        },
+        {
+          "id": "978889",
+          "name": "Mads Hedenstad",
+          "number": 21,
+          "position": "Goalkeeper",
+          "starter": false,
+          "formationField": null
+        }
+      ]
+    }
+  ],
+  "stats": [
+    {
+      "key": "shots",
+      "label": "Shots",
+      "home": null,
+      "away": null,
+      "unit": ""
+    },
+    {
+      "key": "shotsOnTarget",
+      "label": "Shots on target",
+      "home": null,
+      "away": null,
+      "unit": ""
+    },
+    {
+      "key": "possession",
+      "label": "Possession",
+      "home": 47,
+      "away": 53,
+      "unit": "%"
+    }
+  ],
+  "availability": {
+    "events": true,
+    "lineups": true,
+    "statistics": true
+  },
+  "provider": "Sportmonks",
+  "fetchedAt": "2026-11-02T08:15:43.557Z",
+  "contentVersion": "dc839ba636655a24609eb206"
+}

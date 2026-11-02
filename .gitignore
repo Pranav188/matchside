@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.vercel/
+coverage/
+data/provider-raw-*.json
+data/evaluation-*.json
+data/ai-evaluation-results.json
+qa/
+tmp/
+output/
+work/
+.DS_Store
+# Local submission drafts and historical agent handoffs.
+SUBMISSION-NOTE*.md
+EVALUATION-HANDOFF.md
+INTEGRATION-CHECK-*.md
+UI-REFINEMENT.md
+design-qa.md
+REVIEW.md
+*.log
