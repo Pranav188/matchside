@@ -38,6 +38,13 @@ describe('durable recorded AI answers', () => {
     const answer = await lookup('  WHAT  does possession tell us?  ');
     expect(answer).toEqual({ ...bundle.entries[0].answer, cached: true });
   });
+  it('retains genuine legacy demo answers when new generations move to Flash-Lite', async () => {
+    expect(await lookup(MATCH_QUESTIONS.possession, undefined, 'gemini-3.5-flash-lite')).toEqual({ ...bundle.entries[0].answer, cached: true });
+    expect(bundle.model).toBe('gemini-2.5-flash');
+  });
+  it('accepts accurately labelled new Flash-Lite cache bundles', () => {
+    expect(recordedAnswersSchema.parse({ ...bundle, model: 'gemini-3.5-flash-lite' }).model).toBe('gemini-3.5-flash-lite');
+  });
   it('does not substitute an answer for a different question or selected incident', async () => {
     expect(await lookup('Why was a player injured?')).toBeNull();
     expect(await lookup(MATCH_QUESTIONS.possession, snapshot.events[0].id)).toBeNull();

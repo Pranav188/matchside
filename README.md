@@ -13,7 +13,7 @@ I built MatchSide after watching Abha vs Al-Ittihad on FanCode. An injury, subst
 - Select an incident or ask a match question. Gemini answers using the supplied facts, with source links for each claim.
 - Switch between the configured current fixture and a genuine recorded Brøndby IF vs AGF match, clearly labelled **Full-time**.
 
-The recorded demo's three suggested questions use saved Gemini answers, labelled **Cached**. They remain available without a new Gemini or database request. Custom questions still require available quota. Saved answers are invalidated if their recording, evidence, model or prompt version changes.
+The recorded demo's three suggested questions use saved Gemini answers, labelled **Cached**. They remain available without a new Gemini or database request. Custom questions still require available quota. Saved answers are invalidated if their recording, evidence or prompt version changes. The genuine demo answers retain their original Gemini 2.5 Flash provenance; new answers use Gemini 3.5 Flash-Lite.
 
 The interface takes cues from FanCode's charcoal and orange palette. It has its own branding and works alongside your broadcaster. There is no embedded stream or official FanCode integration.
 
@@ -36,7 +36,7 @@ Open [localhost:4173](http://127.0.0.1:4173). To start with the recorded match, 
 
 ## How it works
 
-React and TypeScript provide the interface. Vercel Node functions fetch Sportmonks data, coordinate refreshes through Neon Postgres, and send a bounded evidence bundle to Gemini 2.5 Flash. Cached answers retain the facts and match version they used. Server-side quotas cap shared usage at 20 attempts/day. An optional backup key can handle a provider rate limit, timeout or outage; its attempt counts separately.
+React and TypeScript provide the interface. Vercel Node functions fetch Sportmonks data, coordinate refreshes through Neon Postgres, and send a bounded evidence bundle to Gemini 3.5 Flash-Lite. Cached answers retain the facts and match version they used. Server-side quotas cap shared usage at 20 attempts/day. An optional backup key can handle a provider rate limit, timeout or outage; its attempt counts separately.
 
 Missing data stays unavailable. AI checks reject invalid references and unsupported names or numbers, but they do not guarantee that every explanation is correct.
 

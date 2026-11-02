@@ -1,10 +1,10 @@
 import { existsSync } from 'node:fs';
-import { mkdir, rename, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { handleRequest } from '../server/app.ts';
 import { getConfig } from '../server/config.ts';
 import { recordedExample } from '../server/example.ts';
 import { AI_PROMPT_VERSION } from '../server/ai.ts';
-import { recordedAnswersSchema } from '../server/recorded-answers.ts';
+import { recordedAnswer, recordedAnswersSchema } from '../server/recorded-answers.ts';
 import { MATCH_QUESTIONS } from '../shared/questions.ts';
 import type { AiAnswer } from '../shared/contracts.ts';
 
@@ -15,6 +15,15 @@ if (!process.argv.includes('--confirm')) {
   if (existsSync('.env.local')) process.loadEnvFile('.env.local');
   const config = getConfig();
   const snapshot = (await recordedExample(config.examplePath)).snapshot!;
+  const previous = await readFile('data/recorded-answers.json', 'utf8').then(raw => recordedAnswersSchema.parse(JSON.parse(raw))).catch(() => null);
+  if (previous && previous.model !== config.model) {
+    const usable = await Promise.all(previous.entries.map(entry => recordedAnswer(snapshot, entry.question, entry.eventId, config.model)));
+    if (usable.some(Boolean)) {
+      console.log('Kept existing genuine recorded answers with their original model provenance. No new generation was requested.');
+      process.exit(0);
+    }
+  }
+
   const incident = snapshot.availability.events ? snapshot.events.at(-1) : undefined;
   const substitution = snapshot.availability.events ? [...snapshot.events].reverse().find(event => event.type === 'substitution') : undefined;
   const possession = snapshot.availability.statistics && snapshot.stats.some(stat => stat.key === 'possession' && (stat.home !== null || stat.away !== null));

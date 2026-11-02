@@ -45,6 +45,9 @@ describe('optional Gemini standby configuration', () => {
     expect(backupAiConfigured(getConfig())).toBe(true); expect(getAiLimits(getConfig())).toEqual({daily:10,rpm:2,tpm:100000});
     vi.stubEnv('GEMINI_BACKUP_API_KEY','synthetic-primary'); expect(backupAiConfigured(getConfig())).toBe(false);
   });
+  it('allows the approved free Flash-Lite model with complete server configuration', () => {
+    expect(() => assertAiConfig({ ...getConfig(), apiKey: 'synthetic-key', model: 'gemini-3.5-flash-lite', databaseUrl: 'synthetic-url', sessionSecret: 'x'.repeat(32), freeRpd: 20, freeRpm: 5, freeTpm: 250000 })).not.toThrow();
+  });
   it('does not accept malformed backup quota values as confirmed limits', () => {
     vi.stubEnv('GEMINI_BACKUP_FREE_RPD', '-20');
     vi.stubEnv('GEMINI_BACKUP_FREE_RPM', '5.5');

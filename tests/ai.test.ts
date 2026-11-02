@@ -101,6 +101,15 @@ describe('real Gemini protocol, mocked transport', () => {
     expect(body.systemInstruction.parts[0].text).toContain('Shot statistics and attacking-output comparisons are outside');
     expect(answer.claims).toEqual([]);
   });
+  it('supports the approved Flash-Lite model without a legacy thinking budget', async () => {
+    const fetcher = asFetch(modelResponse(valid()));
+    await generateAnswer({ ...input(), model: 'gemini-3.5-flash-lite' }, fetcher);
+    expect(fetcher.mock.calls[0][0]).toBe('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent');
+    const body = JSON.parse(fetcher.mock.calls[0][1]?.body as string);
+    expect(body.generationConfig.thinkingConfig).toBeUndefined();
+    expect(body.generationConfig.responseMimeType).toBe('application/json');
+    expect(body.tools).toBeUndefined();
+  });
   it('calls the fixed model with header authentication, no tools, and structured output', async () => {
     const fetcher = asFetch(modelResponse(valid()));
     const answer = await generateAnswer(input(), fetcher);

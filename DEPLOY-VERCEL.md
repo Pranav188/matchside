@@ -51,7 +51,7 @@ Expand **Environment Variables** in the import screen. For an existing project, 
 | `GEMINI_API_KEY` | Your existing Google AI Studio key |
 | `DATABASE_URL` | The same Neon connection string already used locally |
 | `SESSION_SECRET` | Your existing random secret, at least 32 characters |
-| `GEMINI_MODEL` | `gemini-2.5-flash` |
+| `GEMINI_MODEL` | `gemini-3.5-flash-lite` |
 | `GEMINI_FREE_RPD` | Your confirmed free requests/day, previously shown as `20` |
 | `GEMINI_FREE_RPM` | Your confirmed free requests/minute, previously shown as `5` |
 | `GEMINI_FREE_TPM` | Your confirmed free tokens/minute, previously shown as `250000` |

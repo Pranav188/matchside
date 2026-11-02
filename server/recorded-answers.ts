@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { z } from 'zod';
 import { AI_PROMPT_VERSION, buildEvidence, responseSchema, verifyClaims } from './ai.ts';
+import { GEMINI_MODELS } from './config.ts';
 import type { AiAnswer, MatchSnapshot } from '../shared/contracts.ts';
 
 const savedAnswerSchema = responseSchema.extend({
@@ -11,7 +12,7 @@ const savedAnswerSchema = responseSchema.extend({
 });
 export const recordedAnswersSchema = z.object({
   fixtureId: z.string(), contentVersion: z.string(), promptVersion: z.string(),
-  model: z.literal('gemini-2.5-flash'), generatedAt: z.string().datetime(),
+  model: z.enum(GEMINI_MODELS), generatedAt: z.string().datetime(),
   entries: z.array(z.object({ question: z.string().trim().min(3).max(400), eventId: z.string().optional(), answer: savedAnswerSchema }).strict()).max(3),
 }).strict();
 export const normalizeQuestion = (question: string) => question.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -20,7 +21,10 @@ export const normalizeQuestion = (question: string) => question.trim().toLowerCa
 export async function recordedAnswer(snapshot: MatchSnapshot, question: string, eventId: string | undefined, model: string, path = 'data/recorded-answers.json'): Promise<AiAnswer | null> {
   try {
     const bundle = recordedAnswersSchema.parse(JSON.parse(await readFile(resolve(process.cwd(), path), 'utf8')));
-    if (bundle.fixtureId !== snapshot.fixtureId || bundle.contentVersion !== snapshot.contentVersion || bundle.promptVersion !== AI_PROMPT_VERSION || bundle.model !== model) return null;
+    // Keep the genuine legacy recording cache during the approved model migration.
+    // Its stored model provenance and exact evidence are still validated below.
+    const compatibleModel = bundle.model === model || (bundle.model === 'gemini-2.5-flash' && model === 'gemini-3.5-flash-lite');
+    if (bundle.fixtureId !== snapshot.fixtureId || bundle.contentVersion !== snapshot.contentVersion || bundle.promptVersion !== AI_PROMPT_VERSION || !compatibleModel) return null;
     const entry = bundle.entries.find(item => normalizeQuestion(item.question) === normalizeQuestion(question) && item.eventId === eventId);
     if (!entry || (eventId && (!snapshot.availability.events || !snapshot.events.some(event => event.id === eventId)))) return null;
     const answer = entry.answer;

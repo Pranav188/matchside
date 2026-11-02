@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import type { AiAnswer, EvidenceFact, MatchSnapshot, Mode } from '../shared/contracts';
 import { retryAfterSeconds } from './errors.ts';
+import { GEMINI_MODELS } from './config.ts';
 
 export const AI_PROMPT_VERSION = 'match-context-v9';
-const MODEL = 'gemini-2.5-flash';
 const MAX_EVIDENCE_CHARS = 12_000;
 const MAX_WORDS = 120;
 
@@ -116,7 +116,7 @@ export function verifyClaims(result: z.infer<typeof responseSchema>, facts: Evid
 
 export async function generateAnswer({ snapshot, mode, question, eventId, apiKey, model, timeoutMs }: GenerateInput, fetchImpl: typeof fetch = fetch): Promise<AiAnswer> {
   snapshot = structuredClone(snapshot);
-  if (model !== MODEL) throw new ModelError('AI_CONFIGURATION', 'The configured AI model is not supported.', 503);
+  if (!GEMINI_MODELS.some(supported => supported === model)) throw new ModelError('AI_CONFIGURATION', 'The configured AI model is not supported.', 503);
   if (!apiKey) throw new ModelError('AI_NOT_CONFIGURED', 'AI explanations are not configured yet.', 503);
   if (!question.trim() || question.length > 800) throw new ModelError('INVALID_QUESTION', 'Enter a question of up to 800 characters.', 400);
   if (eventId && (!snapshot.availability.events || !snapshot.events.some(event => event.id === eventId))) throw new ModelError('EVENT_NOT_FOUND', 'That event is no longer available in the current match update.', 409);
@@ -126,14 +126,16 @@ export async function generateAnswer({ snapshot, mode, question, eventId, apiKey
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), Math.max(1,Math.min(20_000,timeoutMs??20_000)));
   try {
-    const response = await fetchImpl(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+    const response = await fetchImpl(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
       method: 'POST', signal: controller.signal,
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
         contents: [{ role: 'user', parts: [{ text: JSON.stringify({ question: clean(question, 800), selectedEventId: eventId ? `event:${eventId}` : null, EVIDENCE: facts }) }] }],
         generationConfig: {
-          temperature: 0.1, maxOutputTokens: 1024, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json',
+          temperature: 0.1, maxOutputTokens: 1024,
+          ...(model === 'gemini-2.5-flash' ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+          responseMimeType: 'application/json',
           responseSchema: { type: 'OBJECT', properties: { claims: { type: 'ARRAY', items: { type: 'OBJECT', properties: { text: { type: 'STRING' }, evidenceIds: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['text', 'evidenceIds'] } }, limitation: { type: 'STRING', nullable: true } }, required: ['claims', 'limitation'] },
         },
       }),
