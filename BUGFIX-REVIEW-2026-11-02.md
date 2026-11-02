@@ -64,3 +64,16 @@ Production: https://matchside.vercel.app/ . Runtime commit: `df6f82a`. Local pro
 Fresh unauthenticated HTTP requests returned 200 for the page, health, current fixture and recorded fixture. The current fixture remained correctly labelled scheduled. All three shipped answers returned as cached. One actual hosted generation returned “AGF's starting formation was 3-4-2-1.” and cited the matching formation fact. Browser checks covered the recorded page, suggested-question Enter submission, evidence dialog, and a 390px viewport without horizontal overflow; normal viewport settings were restored.
 
 Primary and backup credentials were stored as approved Vercel secrets for Production and Preview. No credential values were included in Git or frontend assets. Backup model metadata access returned 200; actual failover remains unforced. The complete real-model evaluation and successive live in-play observations remain outstanding.
+
+
+## New-account model compatibility and key handover
+
+The owner requested interchanging the primary and backup account keys, then approved Gemini 3.5 Flash-Lite after the new account rejected 2.5 generation with HTTP 404. Its model-list/metadata endpoints still returned 200; metadata access alone did not establish generation eligibility. Google documents restricted 2.5 access for new users: https://ai.google.dev/gemini-api/docs/models/gemini-2.5-flash .
+
+The keys were interchanged locally and in Vercel Production/Preview. The exhausted 20-attempt app counter was archived, preserving its value, for this one-time handover to the unused account. A fresh 20-attempt budget was started; failed compatibility checks still count in that new budget. The runtime does not automatically restart budgets or multiply the allowance across accounts.
+
+Runtime commit `27167b4` uses server-selected Gemini 3.5 Flash-Lite for new generations and omits the legacy 2.5 thinking-budget parameter. The existing genuine 2.5 recorded answers remain readable only with their exact fixture, question/context, facts and prompt version; their original model metadata is preserved. The cache preparation command retains these answers instead of relabelling them as new-model outputs. No schema migration or paid activation was required.
+
+Verification: four migration regression cases failed before implementation, then all 188 application tests, typecheck, production build and four packaging checks passed. One real local and one fresh hosted Flash-Lite answer returned 200 with the matching 85-minute Kristian Arnstad argument/card fact. All three shipped suggested answers returned 200 as cached. Browser Enter submission returned that saved answer; the visible keyboard instruction is removed. Hosted proof is retained locally under `qa/hosted-flash-lite-check.json` and `qa/hosted-flash-lite-ui.png`.
+
+The submission Markdown and Downloads PDF now name Flash-Lite; the one-page PDF and clickable contact footer were visually and structurally checked, and visible text remains under 200 words. Actual backup failover and the full real-model evaluation remain unforced/incomplete.
