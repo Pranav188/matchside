@@ -56,3 +56,11 @@ The UI explains that a cached answer is being shown because of a limit only afte
 The shared app cap is now 20 attempts/day, bounded by the lower confirmed configured account limits. The five-call reserve was removed at the owner's request. Each primary or fallback attempt gets a separate atomic reservation; per-visitor and rolling limits remain. At most one backup attempt follows a provider rate limit, timeout or outage, within a shared deadline. Invalid responses and configuration errors are not retried.
 
 184 application tests, typecheck, production build and four packaging checks pass. Backup routing is verified with mocked failures; an actual backup generation/failover is not claimed. No schema change was needed.
+
+## Hosted verification
+
+Production: https://matchside.vercel.app/ . Runtime commit: `df6f82a`. Local project moved intact to `/Users/pranav/projects/matchside`; all checks were repeated there. The linked full Vercel build and Hobby deployment passed.
+
+Fresh unauthenticated HTTP requests returned 200 for the page, health, current fixture and recorded fixture. The current fixture remained correctly labelled scheduled. All three shipped answers returned as cached. One actual hosted generation returned “AGF's starting formation was 3-4-2-1.” and cited the matching formation fact. Browser checks covered the recorded page, suggested-question Enter submission, evidence dialog, and a 390px viewport without horizontal overflow; normal viewport settings were restored.
+
+Primary and backup credentials were stored as approved Vercel secrets for Production and Preview. No credential values were included in Git or frontend assets. Backup model metadata access returned 200; actual failover remains unforced. The complete real-model evaluation and successive live in-play observations remain outstanding.

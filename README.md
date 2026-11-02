@@ -2,6 +2,8 @@
 
 A football companion for understanding the match while you watch.
 
+[Try the recorded-match demo](https://matchside.vercel.app/?mode=example) · [Current match](https://matchside.vercel.app/)
+
 I built MatchSide after watching Abha vs Al-Ittihad on FanCode. An injury, substitution and free kick left me looking for context that I could not find beneath the stream. I ended up opening another app. MatchSide brings the match facts and explanations into one place.
 
 ## What you can try

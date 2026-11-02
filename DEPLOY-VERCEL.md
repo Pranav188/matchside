@@ -1,6 +1,8 @@
 # Deploy MatchSide on Vercel
 
-Prepared 2 November 2026. This guide deploys the React site and its three Node API functions together. Neon remains the database; Sportmonks and Gemini remain external providers. No custom domain, paid plan, video hosting or scheduled worker is required.
+Deployed 2 November 2026 at [matchside.vercel.app](https://matchside.vercel.app/). Use [the recorded-match demo](https://matchside.vercel.app/?mode=example) for off-hours review.
+
+This guide deploys the React site and its three Node API functions together. Neon remains the database; Sportmonks and Gemini remain external providers. No custom domain, paid plan, video hosting or scheduled worker is required.
 
 ## What is ready, and what is still unverified
 
@@ -8,11 +10,11 @@ Prepared 2 November 2026. This guide deploys the React site and its three Node A
 - API files use Vercel's supported `export default { fetch }` Web Request/Response interface. [Node runtime documentation](https://vercel.com/docs/functions/runtimes/node-js)
 - A deployment-only bug was reproduced and fixed: emitted JavaScript imported `.ts` paths that were absent from the function bundle. `rewriteRelativeImportExtensions` now produces `.js` imports. A regression loads the emitted handlers in plain Node, without `tsx`, and reads the genuine recording. [TypeScript option](https://www.typescriptlang.org/tsconfig/rewriteRelativeImportExtensions.html)
 - An isolated check with the official Vercel Node builder passed: the handler loaded, the recording was bundled, and no `.env` file was included. This is a bundling check, not a hosted deployment.
-- Full `vercel build` requires linked account/project settings. That check and the hosted API/browser checks remain outstanding until the account is connected.
+- The account-linked `vercel build` passed, and production was deployed on Hobby. Unauthenticated production-page/API checks, all three saved answers, and one new Gemini answer with matching evidence passed. An actual backup failover was not forced.
 
 ## 1. Use your personal Hobby account
 
-Finish creating your Vercel account and select the free **Hobby** plan. Use this as your personal internship-assignment project. Keep Neon and Gemini on their existing free plans. There is no need to start a Pro trial or add a paid integration. Hobby has usage caps and is intended for personal, non-commercial projects. [Hobby plan](https://vercel.com/docs/plans/hobby)
+The project is linked to the personal **Hobby** account `pranav-2d7a`. For a fresh installation, create a personal Hobby account. Use this as your personal internship-assignment project. Keep Neon and Gemini on their existing free plans. There is no need to start a Pro trial or add a paid integration. Hobby has usage caps and is intended for personal, non-commercial projects. [Hobby plan](https://vercel.com/docs/plans/hobby)
 
 The project currently allows each API function up to 60 seconds, within the documented Hobby function duration limit. Its own provider and AI timeouts are shorter. Vercel also meters function requests, memory and CPU, so check **Usage** after sharing the artifact. [Function duration](https://vercel.com/docs/functions/configuring-functions/duration)
 
@@ -143,3 +145,10 @@ Follow the hosted checks above on the production domain. Subsequent local change
 | A wrong release is public | Restore the previous known-good deployment through Vercel's deployment controls, then fix and redeploy; environment changes need their own review |
 
 No deployment, account change, GitHub push or form submission is performed by this document.
+
+## This project after its first deployment
+
+- Local checkout: `/Users/pranav/projects/matchside`. Local API keys remain in its ignored `.env.local`. Vercel CLI credentials are in ignored `.vercel/cli`; they are not committed or uploaded as application source.
+- [Vercel project](https://vercel.com/pranav-2d7a/matchside): inspect builds and runtime failures under Deployments/Logs; manage hosted secrets under Settings → Environment Variables. Redeploy after changing hosted environment values.
+- This first release was deployed through the CLI. To enable automatic deployment on GitHub pushes, connect `Pranav188/matchside` under Settings → Git. Otherwise redeploy with the CLI from this checkout using `--global-config .vercel/cli`.
+- Public production access was verified without Vercel credentials. Default deployment protection was not disabled.
