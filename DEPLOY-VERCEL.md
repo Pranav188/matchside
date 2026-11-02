@@ -152,3 +152,8 @@ No deployment, account change, GitHub push or form submission is performed by th
 - [Vercel project](https://vercel.com/pranav-2d7a/matchside): inspect builds and runtime failures under Deployments/Logs; manage hosted secrets under Settings → Environment Variables. Redeploy after changing hosted environment values.
 - This first release was deployed through the CLI. To enable automatic deployment on GitHub pushes, connect `Pranav188/matchside` under Settings → Git. Otherwise redeploy with the CLI from this checkout using `--global-config .vercel/cli`.
 - Public production access was verified without Vercel credentials. Default deployment protection was not disabled.
+
+
+## Visitor counts
+
+Web Analytics is enabled on the included Hobby plan. The React entry point loads the official analytics component. Open https://vercel.com/pranav-2d7a/matchside/analytics to view visitors and page views collected after activation. Your own visits count too; analytics cannot identify a Dream11 reviewer. No custom events or question text are sent by this integration.
