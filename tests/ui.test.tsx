@@ -82,7 +82,7 @@ describe('live match companion behavior', () => {
     expect(screen.getByRole('alert').textContent).not.toContain('3600 seconds');
     await flush(() => fireEvent.click(screen.getByRole('button',{name:'Explain latest incident'})));
     await flush(() => fireEvent.click(screen.getByRole('button',{name:'Ask MatchSide'})));
-    expect(screen.getByText('We’re showing a cached answer because the daily AI generation limit has been reached.')).toBeTruthy();
+    expect(screen.getByText('We’re showing a cached answer because MatchSide’s daily AI generation limit has been reached.')).toBeTruthy();
   });
   it('does not claim a rate limit just because an answer is cached', async () => {
     mockFetch(url => url === '/api/ask' ? json({...answer(),mode:'example',cached:true}) : usual(url));
@@ -91,7 +91,7 @@ describe('live match companion behavior', () => {
     await flush(() => fireEvent.click(screen.getByRole('button',{name:'Explain latest incident'})));
     await flush(() => fireEvent.click(screen.getByRole('button',{name:'Ask MatchSide'})));
     expect(screen.getByText('Showing a saved AI answer for this recorded match. No new AI request was made.')).toBeTruthy();
-    expect(screen.queryByText(/because the daily AI generation limit/)).toBeNull();
+    expect(screen.queryByText(/because MatchSide’s daily AI generation limit/)).toBeNull();
   });
   it('shows a neutral loading state instead of claiming the match is disconnected before the first response', async () => {
     const pending = deferred<Response>();

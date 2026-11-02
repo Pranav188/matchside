@@ -50,3 +50,9 @@ A daily app-cap denial is now distinguished from a temporary limit using a read-
 The UI explains that a cached answer is being shown because of a limit only after receiving a confirmed limit response. Otherwise it neutrally identifies a previously saved answer. Different recorded fixtures remain isolated by fixture/version/context checks; a multiple-recording selector has not been added.
 
 165 tests, typecheck, build and four packaging checks passed. Browser QA reproduced the custom-question denial and then the cached-answer recovery, including the November 3, 1:30 PM IST reset message. No further Gemini generations were requested.
+
+## Owner-approved allowance and backup update
+
+The shared app cap is now 20 attempts/day, bounded by the lower confirmed configured account limits. The five-call reserve was removed at the owner's request. Each primary or fallback attempt gets a separate atomic reservation; per-visitor and rolling limits remain. At most one backup attempt follows a provider rate limit, timeout or outage, within a shared deadline. Invalid responses and configuration errors are not retried.
+
+184 application tests, typecheck, production build and four packaging checks pass. Backup routing is verified with mocked failures; an actual backup generation/failover is not claimed. No schema change was needed.

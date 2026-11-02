@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { access } from 'node:fs/promises';
-import { getConfig, assertAiConfig, assertMatchConfig } from './config.ts';
+import { getConfig, assertAiConfig, assertMatchConfig, backupAiConfigured, getAiLimits } from './config.ts';
 import { AppError, publicError } from './errors.ts';
 import { PostgresStore } from './database.ts';
 import { currentMatch } from './match-service.ts';
@@ -47,7 +47,7 @@ async function routeRequest(request:Request):Promise<Response> {
   try {
     if(url.pathname==='/api/health' && request.method==='GET') {
       const c=getConfig(); let example=false; try {await access(c.examplePath);example=true;}catch{}
-      const services={football:!!c.token,fixture:/^\d+$/.test(c.fixtureId),ai:!!c.apiKey,database:!!c.databaseUrl,session:c.sessionSecret.length>=32,aiQuota:c.freeRpd>5&&c.freeRpm>0&&c.freeTpm>0,example};
+      const services={football:!!c.token,fixture:/^\d+$/.test(c.fixtureId),ai:!!c.apiKey,database:!!c.databaseUrl,session:c.sessionSecret.length>=32,aiQuota:c.freeRpd>0&&c.freeRpm>0&&c.freeTpm>0,example};
       return json({status:Object.entries(services).filter(([key])=>key!=='example').every(([,v])=>v)?'ready':'setup-required',services});
     }
     if(url.pathname==='/api/match' && request.method==='GET') {
@@ -82,26 +82,42 @@ async function routeRequest(request:Request):Promise<Response> {
       const key=createHash('sha256').update(JSON.stringify({mode:data.mode,version:snapshot.contentVersion,question:data.question.toLowerCase().replace(/\s+/g,' '),eventId:data.eventId,model:config.model,prompt:AI_PROMPT_VERSION})).digest('hex');
       const cached=await store.getAnswer(key,Date.now());
       if(cached) return json({...cached,cached:true},200,headers);
-      const token=randomUUID();
-      // Conservative UTF-8 byte reservation bounds tokens, plus prompt/output allowance.
+      // Both accounts share a conservative total allowance, visitor limits and one in-flight gate.
+      const limits=getAiLimits(config);
+      const candidates=[config.apiKey,...(backupAiConfigured(config)?[config.backupGemini.apiKey]:[])];
+      const deadline=Math.min(started+30_000,Date.now()+25_000);
       const estimated=Buffer.byteLength(JSON.stringify(buildEvidence(snapshot,data.eventId))+data.question)+4096;
-      const reservation=await store.reserveAi(session.id,token,estimated,{daily:Math.min(40,config.freeRpd-5),rpm:config.freeRpm,tpm:config.freeTpm},Date.now());
-      if(!reservation.allowed) {
-        const daily=await store.dailyAiLimit(session.id,Math.min(40,config.freeRpd-5),Date.now()).catch(()=>null);
-        const retryAfterSeconds=daily?Math.max(1,Math.ceil((Date.parse(daily.resetAt)-Date.now())/1000)):reservation.retryAfterSeconds;
-        const message=daily
-          ? `${daily.scope==='application'?"Today's AI generation allowance has been reached.":'You have reached your daily AI generation allowance.'} In Recorded match, the three suggested questions still work using saved answers.`
-          : 'New AI requests are temporarily limited. Match information remains available. In Recorded match, try one of the three suggested questions for a saved answer.';
-        return json({error:{code:daily?'AI_DAILY_LIMIT':'AI_RATE_LIMIT',message,requestId,retryAfterSeconds,...(daily?{retryAt:daily.resetAt}:{})}},429,{...headers,'Retry-After':String(retryAfterSeconds)});
+      let previousError:unknown;
+      for(const [attempt,apiKey] of candidates.entries()) {
+        if(deadline-Date.now()<1000)throw previousError??new AppError('AI_TIMEOUT','The explanation took too long. Please try again.',504);
+        const token=randomUUID();
+        const reservation=await store.reserveAi(session.id,token,estimated,limits,Date.now());
+        if(!reservation.allowed) {
+          const daily=await store.dailyAiLimit(session.id,limits.daily,Date.now()).catch(()=>null);
+          const retryAfterSeconds=daily?Math.max(1,Math.ceil((Date.parse(daily.resetAt)-Date.now())/1000)):reservation.retryAfterSeconds;
+          const message=daily
+            ? `${daily.scope==='application'?"MatchSide's daily AI generation allowance has been reached.":'You have reached your daily AI generation allowance.'} In Recorded match, the three suggested questions still work using saved answers.`
+            : 'New AI requests are temporarily limited. Match information remains available. In Recorded match, try one of the three suggested questions for a saved answer.';
+          return json({error:{code:daily?'AI_DAILY_LIMIT':'AI_RATE_LIMIT',message,requestId,retryAfterSeconds,...(daily?{retryAt:daily.resetAt}:{})}},429,{...headers,'Retry-After':String(retryAfterSeconds)});
+        }
+        let cooldown=0;
+        try {
+          const remaining=deadline-Date.now();
+          if(remaining<1000)throw new AppError('AI_TIMEOUT','The explanation took too long. Please try again.',504);
+          const answer=await generateAnswer({snapshot,mode:data.mode,question:data.question,eventId:data.eventId,apiKey,model:config.model,timeoutMs:Math.min(20_000,remaining)});
+          await store.putAnswer(key,answer,Date.now()).catch(()=>console.error(JSON.stringify({requestId,event:'answer-cache-write-failed'})));
+          console.info(JSON.stringify({requestId,event:'answer',version:snapshot.contentVersion,durationMs:Date.now()-started}));
+          return json(answer,200,headers);
+        }catch(error){
+          previousError=error;
+          const safe=publicError(error);
+          const fallback=attempt===0&&candidates.length===2&&['AI_RATE_LIMITED','AI_TIMEOUT','AI_UNAVAILABLE'].includes(safe.code)&&deadline-Date.now()>=1000;
+          if(safe.status===429&&!fallback)cooldown=Math.max(60,safe.retryAfterSeconds??60);
+          if(!fallback)throw error;
+          console.info(JSON.stringify({requestId,event:'ai-backup-attempt',reason:safe.code}));
+        }finally {await store.releaseAi(token,cooldown,Date.now()).catch(()=>console.error(JSON.stringify({requestId,event:'ai-lease-release-failed'})));}
       }
-      let cooldown=0;
-      try {
-        const answer=await generateAnswer({snapshot,mode:data.mode,question:data.question,eventId:data.eventId,apiKey:config.apiKey,model:config.model});
-        await store.putAnswer(key,answer,Date.now()).catch(()=>console.error(JSON.stringify({requestId,event:'answer-cache-write-failed'})));
-        console.info(JSON.stringify({requestId,event:'answer',version:snapshot.contentVersion,durationMs:Date.now()-started}));
-        return json(answer,200,headers);
-      }catch(error){const safe=publicError(error);if(safe.status===429)cooldown=Math.max(60,safe.retryAfterSeconds??60);throw error;}
-      finally {await store.releaseAi(token,cooldown,Date.now()).catch(()=>console.error(JSON.stringify({requestId,event:'ai-lease-release-failed'})));}
+      throw previousError??new AppError('AI_UNAVAILABLE','AI is temporarily unavailable. Match information is still available.',502);
     }
     if(['/api/health','/api/match','/api/ask'].includes(url.pathname)) return json({error:{code:'METHOD_NOT_ALLOWED',message:'This method is not supported.',requestId}},405);
     return json({error:{code:'NOT_FOUND',message:'This endpoint does not exist.',requestId}},404);

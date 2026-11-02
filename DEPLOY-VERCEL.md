@@ -53,8 +53,12 @@ Expand **Environment Variables** in the import screen. For an existing project, 
 | `GEMINI_FREE_RPD` | Your confirmed free requests/day, previously shown as `20` |
 | `GEMINI_FREE_RPM` | Your confirmed free requests/minute, previously shown as `5` |
 | `GEMINI_FREE_TPM` | Your confirmed free tokens/minute, previously shown as `250000` |
+| `GEMINI_BACKUP_API_KEY` | Optional second-account Gemini key |
+| `GEMINI_BACKUP_FREE_RPD` | Confirmed backup requests/day, `20` |
+| `GEMINI_BACKUP_FREE_RPM` | Confirmed backup requests/minute, `5` |
+| `GEMINI_BACKUP_FREE_TPM` | Confirmed backup tokens/minute, `250000` |
 
-Recheck the three quota values in AI Studio if the account's allowance has changed. The app reserves five daily provider calls and caps its own daily generations at the smaller of 40 or the free daily allowance minus five. Both local use and hosted use share that allowance when they use the same Neon database and Gemini project.
+Recheck the three quota values in AI Studio if the account's allowance has changed. The shared app allowance is capped at 20 attempts/day and bounded by the confirmed account limits. A backup attempt counts separately; adding a second key does not double the app allowance. Local and hosted use share the app allowance when they use the same Neon database. One backup attempt is allowed for an actual provider rate limit, timeout or outage, within the same overall deadline. Invalid answers and configuration errors are not retried.
 
 The recording uses the default path `data/recorded-match.json`, so `RECORDED_SNAPSHOT_PATH` can be omitted. Do not set it to a path on your Mac.
 

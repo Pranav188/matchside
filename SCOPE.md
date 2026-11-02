@@ -45,6 +45,10 @@ The claim references the corresponding substitution event and retains the exact 
 
 Three genuine Gemini responses for the recorded fixture are saved in `data/recorded-answers.json` and labelled Cached in the interface. They are served before database and model calls, without a daily expiry, only for their exact question/context and matching recording, evidence, model and prompt version. Custom questions retain normal quota checks. Regenerate with `npm run cache:recorded -- --confirm` after intentional recording/prompt changes; this consumes available free quota and stops on errors.
 
+## Updated AI allowance and optional backup
+
+The owner raised the shared daily allowance to 20 attempts. It remains bounded by the confirmed free account limits, with the existing visitor, RPM and TPM checks. A distinct optional backup key with confirmed limits permits one fallback after an actual provider rate limit, timeout or outage. Both attempts are reserved separately and use the same snapshot within a shared deadline. Invalid answers, credential errors and validation errors do not trigger fallback. The saved demo does not consume this allowance.
+
 ## Remaining release work
 
 Deploy with authorization, verify public access and actual AI responses, and finish the recorded-mode reviewer flow. The full 20-case real-model evaluation, actual in-play updates and broad device QA remain incomplete and must not be claimed as passed. Current local verification is documented separately from those outstanding integration checks. Submission is not automated.

@@ -81,7 +81,7 @@ Copy all player/team names and all numbers exactly from evidence. For each subst
 A treatment or injury substitution does not establish a diagnosis, severity, recovery time or managerial intent. Never speculate about medical details, tactics or reasons for a manager's choices. A player listed on the bench has not necessarily played. Describe formations as starting formations. When both teams have the same starting formation, prefer one concise claim citing both formation facts. Do not add a separate tactical-movement caveat when the wording already says starting formation. State any necessary limitation only once in the limitation field, not as repeated claims.
 If evidence is insufficient, say what is unavailable instead of guessing. Shot statistics and attacking-output comparisons are outside this prototype’s scope, even if requested. Never invent standings, expected goals, ratings, biographies, probabilities or outcomes. If no factual answer is possible, return an empty claims array and a useful limitation.`;
 
-interface GenerateInput { snapshot: MatchSnapshot; mode: Mode; question: string; eventId?: string; apiKey: string; model: string }
+interface GenerateInput { snapshot: MatchSnapshot; mode: Mode; question: string; eventId?: string; apiKey: string; model: string; timeoutMs?: number }
 
 function answerMetadata(snapshot: MatchSnapshot, mode: Mode, facts: EvidenceFact[]): Omit<AiAnswer, 'claims' | 'limitation'> {
   return { facts, mode, contentVersion: snapshot.contentVersion, asOf: snapshot.fetchedAt, matchMinute: snapshot.minute, cached: false };
@@ -114,7 +114,7 @@ export function verifyClaims(result: z.infer<typeof responseSchema>, facts: Evid
   if (result.limitation && /<[^>]*>|https?:\/\/|\u2014/.test(result.limitation)) throw new ModelError('AI_INVALID_RESPONSE', 'The explanation format was invalid. Please try again.');
 }
 
-export async function generateAnswer({ snapshot, mode, question, eventId, apiKey, model }: GenerateInput, fetchImpl: typeof fetch = fetch): Promise<AiAnswer> {
+export async function generateAnswer({ snapshot, mode, question, eventId, apiKey, model, timeoutMs }: GenerateInput, fetchImpl: typeof fetch = fetch): Promise<AiAnswer> {
   snapshot = structuredClone(snapshot);
   if (model !== MODEL) throw new ModelError('AI_CONFIGURATION', 'The configured AI model is not supported.', 503);
   if (!apiKey) throw new ModelError('AI_NOT_CONFIGURED', 'AI explanations are not configured yet.', 503);
@@ -124,7 +124,7 @@ export async function generateAnswer({ snapshot, mode, question, eventId, apiKey
   const metadata = answerMetadata(snapshot, mode, facts);
   if (!facts.some(fact => fact.kind !== 'limitation' && fact.kind !== 'score') && snapshot.score.home === null && snapshot.score.away === null) return { ...metadata, claims: [], limitation: 'There is not enough match information to answer yet. Try again after the next update.' };
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 20_000);
+  const timeout = setTimeout(() => controller.abort(), Math.max(1,Math.min(20_000,timeoutMs??20_000)));
   try {
     const response = await fetchImpl(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
       method: 'POST', signal: controller.signal,
@@ -141,7 +141,8 @@ export async function generateAnswer({ snapshot, mode, question, eventId, apiKey
     if (!response.ok) {
       const seconds = Math.max(1, retryAfterSeconds(response.headers.get('retry-after')) ?? 60);
       if (response.status === 429) throw new ModelError('AI_RATE_LIMITED', 'AI is temporarily at its request limit. Match information is still available.', 429, seconds);
-      if (response.status === 401 || response.status === 403) throw new ModelError('AI_CONFIGURATION', 'AI access is not configured correctly. Match information is still available.', 503);
+      if (response.status === 408) throw new ModelError('AI_TIMEOUT', 'The explanation took too long. Please try again.', 504);
+      if (response.status >= 400 && response.status < 500) throw new ModelError('AI_CONFIGURATION', 'AI access is not configured correctly. Match information is still available.', 503);
       throw new ModelError('AI_UNAVAILABLE', 'AI is temporarily unavailable. Match information is still available.', 502);
     }
     const body = await response.json();

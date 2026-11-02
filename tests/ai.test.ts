@@ -255,9 +255,23 @@ describe('real Gemini protocol, mocked transport', () => {
       expect(fetcher).toHaveBeenCalledTimes(1);
     } finally { clock.mockRestore(); }
   });
+  it('classifies upstream configuration failures without treating them as a retryable outage', async () => {
+    await expect(generateAnswer(input(), asFetch(new Response('private invalid-key details',{status:400})))).rejects.toMatchObject({code:'AI_CONFIGURATION',status:503});
+  });
+  it('keeps an upstream request timeout eligible for the bounded fallback', async () => {
+    await expect(generateAnswer(input(), asFetch(new Response('private timeout details',{status:408})))).rejects.toMatchObject({code:'AI_TIMEOUT',status:504});
+  });
   it.each([401, 403, 500])('sanitizes upstream error details (%s)', async status => {
     const error = await generateAnswer(input(), asFetch(new Response('secret provider detail', { status }))).catch(error => error);
     expect(error).toBeInstanceOf(ModelError); expect(error.message).not.toContain('secret');
+  });
+  it('honors a shorter caller deadline without adding a retry', async () => {
+    vi.useFakeTimers();
+    try {
+      const fetcher = vi.fn<typeof fetch>().mockImplementation((_url, init) => new Promise((_resolve, reject) => init?.signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')))));
+      const pending = expect(generateAnswer({...input(),timeoutMs:1000},fetcher)).rejects.toMatchObject({code:'AI_TIMEOUT',status:504});
+      await vi.advanceTimersByTimeAsync(1000); await pending; expect(fetcher).toHaveBeenCalledTimes(1);
+    } finally {vi.useRealTimers();}
   });
   it('times out after 20 seconds with no automatic retry', async () => {
     vi.useFakeTimers();

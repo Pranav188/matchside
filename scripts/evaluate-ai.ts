@@ -5,7 +5,7 @@ import { createHash,randomUUID } from 'node:crypto';
 import { AI_EVALUATION_CASES } from '../tests/ai-evaluation.ts';
 import { buildEvidence,generateAnswer,AI_PROMPT_VERSION } from '../server/ai.ts';
 import { PostgresStore } from '../server/database.ts';
-import { assertAiConfig,getConfig } from '../server/config.ts';
+import { assertAiConfig,getConfig,getAiLimits } from '../server/config.ts';
 import type{MatchSnapshot}from'../shared/contracts.ts';
 if(existsSync('.env.local'))process.loadEnvFile('.env.local');
 if(!process.argv.includes('--confirm')){console.error('Use --confirm to run real model evaluations against your free quota. Requires data/evaluation-manifest.json with actual captured provider snapshots.');process.exit(1);}
@@ -23,7 +23,7 @@ try{
   let answer=await store.getAnswer(cacheKey,Date.now());
   if(!answer){
    const token=randomUUID(),estimated=Buffer.byteLength(JSON.stringify(buildEvidence(snapshot,item.eventId))+question)+4096;
-   const reservation=await store.reserveAi('evaluation',token,estimated,{daily:Math.min(40,config.freeRpd-5),rpm:config.freeRpm,tpm:config.freeTpm},Date.now());
+   const reservation=await store.reserveAi('evaluation',token,estimated,getAiLimits(config),Date.now());
    if(!reservation.allowed){console.log(`Paused before ${item.id}: free quota or cooldown. Rerun later; cached results are reused.`);break;}
    let cooldown=0;
    try{answer=await generateAnswer({snapshot,mode:'example',question,eventId:item.eventId,apiKey:config.apiKey,model:config.model});await store.putAnswer(cacheKey,answer,Date.now());}

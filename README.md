@@ -34,7 +34,7 @@ Open [localhost:4173](http://127.0.0.1:4173). To start with the recorded match, 
 
 ## How it works
 
-React and TypeScript provide the interface. Vercel Node functions fetch Sportmonks data, coordinate refreshes through Neon Postgres, and send a bounded evidence bundle to Gemini 2.5 Flash. Cached answers retain the facts and match version they used. Server-side quotas limit free-tier usage.
+React and TypeScript provide the interface. Vercel Node functions fetch Sportmonks data, coordinate refreshes through Neon Postgres, and send a bounded evidence bundle to Gemini 2.5 Flash. Cached answers retain the facts and match version they used. Server-side quotas cap shared usage at 20 attempts/day. An optional backup key can handle a provider rate limit, timeout or outage; its attempt counts separately.
 
 Missing data stays unavailable. AI checks reject invalid references and unsupported names or numbers, but they do not guarantee that every explanation is correct.
 
